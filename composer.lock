@@ -1,0 +1,62 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "d7a39cb171e579b0fae9b8badb696e08",
+    "packages": [
+        {
+            "name": "nox7/nox",
+            "version": "2.0.0-beta7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nox7/nox.git",
+                "reference": "d931406804adcf025688a6d9d907c429eb92fd41"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nox7/nox/zipball/d931406804adcf025688a6d9d907c429eb92fd41",
+                "reference": "d931406804adcf025688a6d9d907c429eb92fd41",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mysqli": "*",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nox\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Nox7",
+                    "email": "nox7@animetavern.com"
+                }
+            ],
+            "description": "A straightforward and dependency-light web framework with minimal syntax learning curves.",
+            "support": {
+                "issues": "https://github.com/nox7/nox/issues",
+                "source": "https://github.com/nox7/nox/tree/2.0.0-beta7"
+            },
+            "time": "2022-05-10T23:08:21+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "nox7/nox": 10
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}
