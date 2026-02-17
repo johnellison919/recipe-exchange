@@ -2,10 +2,12 @@
   background-color: var(--color-gray-50);
 
   &.footer-container {
-    margin: 0;
+    margin: auto;
+    max-width: 1000px;
   }
 
   & p {
     text-align: center;
+    color: var(--color-gray-400);
   }
 }
