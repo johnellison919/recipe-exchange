@@ -1,7 +1,7 @@
 .app-layout {
   display: flex;
   gap: 1rem;
-  max-width: 1000px;
+  max-width: var(--container-width);
   margin: auto;
   padding: 2rem 0;
 

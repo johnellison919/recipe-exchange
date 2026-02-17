@@ -3,7 +3,7 @@
 
   &.footer-container {
     margin: auto;
-    max-width: 1000px;
+    max-width: var(--container-width);
   }
 
   & p {
