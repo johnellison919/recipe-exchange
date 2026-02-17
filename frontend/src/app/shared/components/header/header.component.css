@@ -23,6 +23,68 @@
         display: flex;
         gap: 1rem;
       }
+
+      & .user-menu {
+        position: relative;
+
+        & .user-button {
+          display: flex;
+          align-items: center;
+          background: none;
+          border: none;
+          cursor: pointer;
+          border-radius: 50%;
+          border: 0.25rem solid var(--color-white);
+          transition: all 0.3s ease;
+
+          &:hover {
+            border: 0.25rem solid var(--color-gray-200);
+          }
+        }
+
+        & .user-avatar {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        & .user-dropdown {
+          position: absolute;
+          top: calc(100% + 0.5rem);
+          right: 0;
+          background: var(--color-white);
+          border: 1px solid var(--color-gray-200);
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          min-width: 160px;
+          overflow: hidden;
+          z-index: 100;
+
+          & .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--color-gray-800);
+            text-decoration: none;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background-color: var(--color-gray-50);
+            }
+          }
+
+          & .dropdown-item-logout {
+            border-top: 1px solid var(--color-gray-200);
+            color: var(--color-danger);
+          }
+        }
+      }
     }
   }
 }

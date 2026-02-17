@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, HostListener, ElementRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
 
@@ -11,4 +11,18 @@ import { AuthService } from '../../../core/auth.service';
 export class HeaderComponent {
   protected readonly authService = inject(AuthService);
   protected readonly router = inject(Router);
+  private readonly elementRef = inject(ElementRef);
+
+  protected readonly dropdownOpen = signal(false);
+
+  protected toggleDropdown(): void {
+    this.dropdownOpen.update((open) => !open);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.dropdownOpen.set(false);
+    }
+  }
 }
