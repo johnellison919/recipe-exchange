@@ -10,6 +10,11 @@
   --color-black: #000;
   --color-white: #fff;
 
+  --color-info: #acf2ff;
+  --color-success: #198754;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+
   --color-gray-50: #f8fafc;
   --color-gray-100: #f1f5f9;
   --color-gray-200: #e2e8f0;
