@@ -1,0 +1,10 @@
+.app-layout {
+  display: flex;
+  gap: 1rem;
+  max-width: 1000px;
+  margin: auto;
+
+  & .main-content {
+    width: 100%;
+  }
+}
