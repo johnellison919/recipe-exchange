@@ -4,10 +4,14 @@
       <img src="/logo.png" alt="Recipe Exchange" />
     </a>
     <div class="auth-section">
-      <div class="auth-buttons">
-        <a routerLink="/login" class="button button-outline">Login</a>
-        <a routerLink="/register" class="button button-primary">Sign Up</a>
-      </div>
+      @if (authService.isAuthenticated()) {
+        insert user dropdown
+      } @else {
+        <div class="auth-buttons">
+          <a routerLink="/login" class="button button-outline">Login</a>
+          <a routerLink="/register" class="button button-primary">Sign Up</a>
+        </div>
+      }
     </div>
   </div>
 </header>
