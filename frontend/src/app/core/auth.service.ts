@@ -1,27 +1,8 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of, delay, map } from 'rxjs';
-import { User, UserLogin, UserRegistration, AuthResponse } from '../models/user.model';
-
-const MOCK_USERS: User[] = [
-  {
-    id: 'user_1',
-    username: 'johndoe',
-    email: 'john@example.com',
-    displayName: 'John Doe',
-    avatarUrl: 'https://i.pravatar.cc/150?img=1',
-    createdAt: new Date('2024-01-15'),
-  },
-  {
-    id: 'user_2',
-    username: 'janesmith',
-    email: 'jane@example.com',
-    displayName: 'Jane Smith',
-    avatarUrl: 'https://i.pravatar.cc/150?img=2',
-    createdAt: new Date('2024-02-20'),
-  },
-];
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { User, UserLogin, UserRegistration } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,165 +11,99 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
-  // State signals
   private readonly currentUserSignal = signal<User | null>(null);
   private readonly authLoadingSignal = signal<boolean>(false);
   private readonly authErrorSignal = signal<string | null>(null);
 
-  // Public readonly signals
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly authLoading = this.authLoadingSignal.asReadonly();
   readonly authError = this.authErrorSignal.asReadonly();
-
-  // Computed signals
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
 
   constructor() {
     this.initialize();
   }
 
-  /**
-   * Initialize auth state from localStorage
-   */
   private initialize(): void {
-    const storedUser = localStorage.getItem('currentUser');
-    const storedToken = localStorage.getItem('authToken');
-
-    if (storedUser && storedToken) {
+    // Restore user from localStorage for instant display, then verify with server
+    const stored = localStorage.getItem('currentUser');
+    if (stored) {
       try {
-        const user = JSON.parse(storedUser);
-        // Convert date strings back to Date objects
+        const user = JSON.parse(stored);
         user.createdAt = new Date(user.createdAt);
         this.currentUserSignal.set(user);
-      } catch (error) {
-        console.error('Error parsing stored user:', error);
-        this.logout();
+      } catch {
+        localStorage.removeItem('currentUser');
       }
     }
+
+    // Verify the cookie session is still valid
+    this.http.get<User>('/api/auth/me').subscribe({
+      next: (user) => {
+        user.createdAt = new Date(user.createdAt);
+        this.currentUserSignal.set(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      },
+      error: () => {
+        this.currentUserSignal.set(null);
+        localStorage.removeItem('currentUser');
+      },
+    });
   }
 
-  /**
-   * Log in with email and password
-   */
-  login(credentials: UserLogin): Observable<AuthResponse> {
+  login(credentials: UserLogin): Observable<User> {
     this.authLoadingSignal.set(true);
     this.authErrorSignal.set(null);
 
-    // TODO: Replace with real API call
-    // return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
-    return this.getUserByEmail(credentials.email).pipe(
-      delay(500),
+    return this.http.post<User>('/api/auth/login', credentials).pipe(
       map((user) => {
-        if (!user) {
-          this.authLoadingSignal.set(false);
-          this.authErrorSignal.set('Invalid email or password');
-          throw new Error('Invalid email or password');
-        }
-
-        const token = this.generateMockToken();
-        const authResponse: AuthResponse = {
-          user,
-          token,
-        };
-
-        this.setAuthData(user, token);
+        user.createdAt = new Date(user.createdAt);
+        this.currentUserSignal.set(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
         this.authLoadingSignal.set(false);
-
-        return authResponse;
+        return user;
+      }),
+      catchError((err) => {
+        const message = err.error?.error ?? 'Invalid email or password';
+        this.authErrorSignal.set(message);
+        this.authLoadingSignal.set(false);
+        return throwError(() => err);
       }),
     );
   }
 
-  /**
-   * Register a new user
-   */
-  register(registration: UserRegistration): Observable<AuthResponse> {
+  register(registration: UserRegistration): Observable<User> {
     this.authLoadingSignal.set(true);
     this.authErrorSignal.set(null);
 
-    // TODO: Replace with real API call
-    // return this.http.post<AuthResponse>('/api/auth/register', registration).pipe(
-    return this.getUserByEmail(registration.email).pipe(
-      delay(500),
-      map((existingUser) => {
-        if (existingUser) {
-          this.authLoadingSignal.set(false);
-          this.authErrorSignal.set('Email already registered');
-          throw new Error('Email already registered');
-        }
-
-        const newUser: User = {
-          id: this.generateMockId(),
-          username: registration.username,
-          email: registration.email,
-          displayName: registration.displayName,
-          avatarUrl: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
-          createdAt: new Date(),
-        };
-
-        const token = this.generateMockToken();
-        const authResponse: AuthResponse = {
-          user: newUser,
-          token,
-        };
-
-        this.setAuthData(newUser, token);
+    return this.http.post<User>('/api/auth/register', registration).pipe(
+      map((user) => {
+        user.createdAt = new Date(user.createdAt);
+        this.currentUserSignal.set(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
         this.authLoadingSignal.set(false);
-
-        return authResponse;
+        return user;
+      }),
+      catchError((err) => {
+        const message = err.error?.error ?? 'Registration failed';
+        this.authErrorSignal.set(message);
+        this.authLoadingSignal.set(false);
+        return throwError(() => err);
       }),
     );
   }
 
-  /**
-   * Log out the current user
-   */
   logout(): void {
-    this.currentUserSignal.set(null);
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('authToken');
-    this.router.navigate(['/']);
+    this.http.post('/api/auth/logout', {}).subscribe({
+      complete: () => {
+        this.currentUserSignal.set(null);
+        localStorage.removeItem('currentUser');
+        this.router.navigate(['/']);
+      },
+    });
   }
 
-  /**
-   * Clear auth error
-   */
   clearError(): void {
     this.authErrorSignal.set(null);
-  }
-
-  /**
-   * Set auth data in memory and localStorage
-   */
-  private setAuthData(user: User, token: string): void {
-    this.currentUserSignal.set(user);
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    localStorage.setItem('authToken', token);
-  }
-
-  /**
-   * Look up a user by email
-   */
-  // TODO: Replace with real API call
-  // private getUserByEmail(email: string): Observable<User | null> {
-  //   return this.http.get<User | null>(`/api/users?email=${email}`);
-  // }
-  private getUserByEmail(email: string): Observable<User | null> {
-    const user = MOCK_USERS.find((u) => u.email === email) ?? null;
-    return of(user);
-  }
-
-  /**
-   * Generate a mock authentication token
-   */
-  private generateMockToken(): string {
-    return 'mock_token_' + Math.random().toString(36).substring(2);
-  }
-
-  /**
-   * Generate a mock user ID
-   */
-  private generateMockId(): string {
-    return 'user_' + Math.random().toString(36).substring(2);
   }
 }
