@@ -70,8 +70,12 @@ public class RecipeService(AppDbContext db)
         db.Recipes.Add(recipe);
         await db.SaveChangesAsync();
 
+        db.Votes.Add(new Vote { UserId = authorId, RecipeId = recipe.Id, VoteType = "upvote" });
+        recipe.VoteScore = 1;
+        await db.SaveChangesAsync();
+
         var author = (await db.Users.FindAsync(authorId))!;
-        return MapRecipe(recipe, author, null);
+        return MapRecipe(recipe, author, "upvote");
     }
 
     public async Task<(RecipeResponse? result, string? error)> Update(
