@@ -53,9 +53,9 @@
   font-size: 0.8125rem;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
+.create-recipe-container input,
+.create-recipe-container textarea,
+.create-recipe-container select {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--color-gray-300);
   border-radius: 6px;
@@ -66,16 +66,16 @@
   width: 100%;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.create-recipe-container input:focus,
+.create-recipe-container textarea:focus,
+.create-recipe-container select:focus {
   outline: none;
   border-color: var(--color-primary);
 }
 
-.form-group input.error,
-.form-group textarea.error,
-.form-group select.error {
+.create-recipe-container input.error,
+.create-recipe-container textarea.error,
+.create-recipe-container select.error {
   border-color: var(--color-danger);
 }
 
@@ -205,25 +205,6 @@
   align-items: start;
 }
 
-.ingredient-row input {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-gray-300);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  color: var(--color-gray-900);
-  background: var(--color-white);
-  transition: border-color 0.15s;
-}
-
-.ingredient-row input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.ingredient-row input.error {
-  border-color: var(--color-danger);
-}
-
 /* Instructions */
 .instruction-row {
   display: grid;
@@ -234,24 +215,7 @@
 }
 
 .instruction-row textarea {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-gray-300);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  color: var(--color-gray-900);
-  background: var(--color-white);
   resize: vertical;
-  transition: border-color 0.15s;
-  width: 100%;
-}
-
-.instruction-row textarea:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.instruction-row textarea.error {
-  border-color: var(--color-danger);
 }
 
 .step-number {
