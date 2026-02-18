@@ -46,40 +46,6 @@
   color: var(--color-gray-500);
 }
 
-/* Stats */
-.profile-stats {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  padding: 1rem 1.25rem;
-  background: var(--color-white);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.125rem;
-}
-
-.stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-gray-900);
-}
-
-.stat-label {
-  font-size: 0.8125rem;
-  color: var(--color-gray-500);
-}
-
-/* Awards */
-.profile-awards {
-  margin-bottom: 2rem;
-}
-
 .section-heading {
   font-size: 1.125rem;
   font-weight: 600;

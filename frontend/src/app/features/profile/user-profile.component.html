@@ -17,22 +17,6 @@
       </div>
     </div>
 
-    <div class="profile-stats">
-      <div class="stat">
-        <span class="stat-value">{{ profile()!.recipeCount ?? 0 }}</span>
-        <span class="stat-label">Recipes</span>
-      </div>
-      <div class="stat">
-        <span class="stat-value">{{ profile()!.totalVoteScore ?? 0 }}</span>
-        <span class="stat-label">Total Votes</span>
-      </div>
-    </div>
-
-    <div class="profile-awards">
-      <h2 class="section-heading">Awards</h2>
-      <p class="coming-soon">Coming soon</p>
-    </div>
-
     <div class="profile-recipes">
       <h2 class="section-heading">Recipes</h2>
       @if (recipes().length === 0) {
