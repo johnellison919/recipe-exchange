@@ -14,3 +14,13 @@ public record UserResponse(
     string? AvatarUrl,
     string? Bio,
     DateTime CreatedAt);
+
+public record UserProfileResponse(
+    string Id,
+    string Username,
+    string Email,
+    string? AvatarUrl,
+    string? Bio,
+    DateTime CreatedAt,
+    int RecipeCount,
+    int TotalVoteScore);
