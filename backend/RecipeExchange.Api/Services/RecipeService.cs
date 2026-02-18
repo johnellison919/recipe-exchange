@@ -7,9 +7,12 @@ namespace RecipeExchange.Api.Services;
 
 public class RecipeService(AppDbContext db)
 {
-    public async Task<List<RecipeResponse>> GetAll(string? userId)
+    public async Task<List<RecipeResponse>> GetAll(string? userId, string? authorId = null)
     {
-        var recipes = await db.Recipes.OrderByDescending(r => r.CreatedAt).ToListAsync();
+        var query = db.Recipes.AsQueryable();
+        if (authorId is not null)
+            query = query.Where(r => r.AuthorId == authorId);
+        var recipes = await query.OrderByDescending(r => r.CreatedAt).ToListAsync();
 
         var authorIds = recipes.Select(r => r.AuthorId).Distinct().ToList();
         var authors = await db.Users
