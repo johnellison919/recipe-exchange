@@ -1,0 +1,199 @@
+<div class="create-recipe">
+  <div class="create-recipe-container">
+    <div class="create-recipe-header">
+      <h1>New Recipe</h1>
+      <a routerLink="/" class="button button-outline">Cancel</a>
+    </div>
+
+    @if (error()) {
+      <div class="error-message">{{ error() }}</div>
+    }
+
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+
+      <!-- Title -->
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          id="title"
+          type="text"
+          formControlName="title"
+          placeholder="e.g. Classic Margherita Pizza"
+          [class.error]="recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched"
+        />
+        @if (recipeForm.get('title')?.hasError('required') && recipeForm.get('title')?.touched) {
+          <span class="field-error">Title is required</span>
+        }
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="3"
+          placeholder="Briefly describe your recipe..."
+          [class.error]="recipeForm.get('description')?.invalid && recipeForm.get('description')?.touched"
+        ></textarea>
+        @if (recipeForm.get('description')?.hasError('required') && recipeForm.get('description')?.touched) {
+          <span class="field-error">Description is required</span>
+        }
+      </div>
+
+      <!-- Time / Servings row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prepTime">Prep Time (min)</label>
+          <input id="prepTime" type="number" formControlName="prepTime" min="0" />
+        </div>
+        <div class="form-group">
+          <label for="cookTime">Cook Time (min)</label>
+          <input id="cookTime" type="number" formControlName="cookTime" min="0" />
+        </div>
+        <div class="form-group">
+          <label for="servings">Servings</label>
+          <input id="servings" type="number" formControlName="servings" min="1" />
+        </div>
+      </div>
+
+      <!-- Difficulty / Category row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty" formControlName="difficulty">
+            @for (d of difficulties; track d) {
+              <option [value]="d">{{ d | titlecase }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select
+            id="category"
+            formControlName="category"
+            [class.error]="recipeForm.get('category')?.invalid && recipeForm.get('category')?.touched"
+          >
+            <option value="" disabled>Select a category</option>
+            @for (c of categories(); track c) {
+              <option [value]="c">{{ c | titlecase }}</option>
+            }
+          </select>
+          @if (recipeForm.get('category')?.hasError('required') && recipeForm.get('category')?.touched) {
+            <span class="field-error">Category is required</span>
+          }
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="form-section">
+        <h2>Photo <span class="optional">(optional)</span></h2>
+        @if (imagePreviewUrl()) {
+          <div class="image-preview-wrapper">
+            <img class="image-preview" [src]="imagePreviewUrl()" alt="Recipe preview" />
+            @if (uploadingImage()) {
+              <div class="image-uploading-overlay">Uploading...</div>
+            }
+            <button type="button" class="remove-image-button" (click)="removeImage()" [disabled]="uploadingImage()">
+              &times;
+            </button>
+          </div>
+        } @else {
+          <label class="file-upload-label" [class.disabled]="uploadingImage()">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              class="file-input"
+              (change)="onFileSelected($event)"
+              [disabled]="uploadingImage()"
+            />
+            <span class="file-upload-icon">&#128247;</span>
+            <span>Click to upload a photo</span>
+            <span class="file-upload-hint">JPG, PNG, GIF, WEBP</span>
+          </label>
+        }
+      </div>
+
+      <!-- Ingredients -->
+      <div class="form-section">
+        <h2>Ingredients</h2>
+        <div formArrayName="ingredients">
+          @for (control of ingredients.controls; track $index) {
+            <div class="ingredient-row" [formGroupName]="$index">
+              <input
+                type="text"
+                formControlName="name"
+                placeholder="Ingredient"
+                [class.error]="control.get('name')?.invalid && control.get('name')?.touched"
+              />
+              <input
+                type="text"
+                formControlName="amount"
+                placeholder="Amount"
+                [class.error]="control.get('amount')?.invalid && control.get('amount')?.touched"
+              />
+              <input
+                type="text"
+                formControlName="unit"
+                placeholder="Unit (optional)"
+              />
+              <button
+                type="button"
+                class="remove-button"
+                (click)="removeIngredient($index)"
+                [disabled]="ingredients.length === 1"
+              >
+                &times;
+              </button>
+            </div>
+          }
+        </div>
+        <button type="button" class="add-button" (click)="addIngredient()">+ Add Ingredient</button>
+      </div>
+
+      <!-- Instructions -->
+      <div class="form-section">
+        <h2>Instructions</h2>
+        <div formArrayName="instructions">
+          @for (control of instructions.controls; track $index) {
+            <div class="instruction-row">
+              <span class="step-number">{{ $index + 1 }}</span>
+              <textarea
+                [formControlName]="$index"
+                rows="2"
+                placeholder="Describe this step..."
+                [class.error]="control.invalid && control.touched"
+              ></textarea>
+              <button
+                type="button"
+                class="remove-button"
+                (click)="removeInstruction($index)"
+                [disabled]="instructions.length === 1"
+              >
+                &times;
+              </button>
+            </div>
+          }
+        </div>
+        <button type="button" class="add-button" (click)="addInstruction()">+ Add Step</button>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="button button-primary submit-button"
+          [disabled]="submitting() || uploadingImage()"
+        >
+          @if (submitting()) {
+            Publishing...
+          } @else if (uploadingImage()) {
+            Uploading image...
+          } @else {
+            Publish Recipe
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

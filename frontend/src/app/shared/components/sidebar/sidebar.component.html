@@ -4,9 +4,14 @@
       <label for="search-input" class="search-label">Search Recipes</label>
       <input id="search-input" type="text" class="search-input" placeholder="Search" />
     </div>
-    <div class="sidebar-section">
-      <a routerLink="#link" class="button button-primary">New Recipe</a>
-    </div>
+    @if (!isOnNewRecipePage) {
+      <div class="sidebar-section">
+        <a
+          [routerLink]="authService.isAuthenticated() ? '/recipes/new' : '/login'"
+          class="button button-primary"
+        >New Recipe</a>
+      </div>
+    }
     <div class="sidebar-section">
       <h3 class="sidebar-heading">Recently Viewed</h3>
       <ul class="recent-recipes-list">

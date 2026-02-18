@@ -96,6 +96,8 @@ export class RecipeService {
   loadRecipes(): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
+    this.allowResortSignal.set(true);
+    this.sortSnapshotSignal.set(null);
 
     this.http
       .get<Recipe[]>('/api/recipes')
@@ -136,6 +138,12 @@ export class RecipeService {
     return this.http
       .get<Recipe>(`/api/recipes/${id}`)
       .pipe(map((r) => this.parseDates(r)));
+  }
+
+  uploadImage(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ url: string }>('/api/upload', formData);
   }
 
   createRecipe(recipeData: RecipeCreate): Observable<Recipe> {
