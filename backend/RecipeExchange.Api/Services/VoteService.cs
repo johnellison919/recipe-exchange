@@ -1,6 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using RecipeExchange.Api.Data;
+using RecipeExchange.Api.Dtos;
+using RecipeExchange.Api.Models;
+
 namespace RecipeExchange.Api.Services;
 
-public class VoteService(DbContext db)
+public class VoteService(AppDbContext db)
 {
     public async Task<VoteResponse?> Vote(string recipeId, string userId, string? voteType)
     {

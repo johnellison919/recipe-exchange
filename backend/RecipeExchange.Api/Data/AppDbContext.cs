@@ -1,12 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using RecipeExchange.Api.Models;
 using System.Text.Json;
 
 namespace RecipeExchange.Api.Data;
 
-public class DbContext(DbContextOptions<DbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public static DbSet<User> Users => Set<User>();
-    public static DbSet<Recipe> Recipes => Set<Recipe>();
-    public static DbSet<Vote> Votes => Set<Vote>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Recipe> Recipes => Set<Recipe>();
+    public DbSet<Vote> Votes => Set<Vote>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

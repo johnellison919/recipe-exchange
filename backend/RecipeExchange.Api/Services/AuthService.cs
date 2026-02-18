@@ -1,6 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RecipeExchange.Api.Data;
+using RecipeExchange.Api.Dtos;
+using RecipeExchange.Api.Models;
+
 namespace RecipeExchange.Api.Services;
 
-public class AuthService(DbContext db, IPasswordHasher<User> hasher)
+public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
 {
     public async Task<(User? user, string? error)> ValidateLogin(LoginRequest request)
     {

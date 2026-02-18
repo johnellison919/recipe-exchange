@@ -1,6 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using RecipeExchange.Api.Data;
+using RecipeExchange.Api.Dtos;
+using RecipeExchange.Api.Models;
+
 namespace RecipeExchange.Api.Services;
 
-public class RecipeService(DbContext db)
+public class RecipeService(AppDbContext db)
 {
     public async Task<List<RecipeResponse>> GetAll(string? userId)
     {
