@@ -12,16 +12,16 @@
         >New Recipe</a>
       </div>
     }
-    @if (authService.isAuthenticated()) {
+    @if (profileContext.user(); as profileUser) {
       <div class="sidebar-section">
-        <h3 class="sidebar-heading">Your Stats</h3>
+        <h3 class="sidebar-heading">{{ profileUser.username }}'s Stats</h3>
         <div class="stats-grid">
           <div class="stat-item">
-            <span class="stat-value">{{ authService.currentUser()?.recipeCount ?? 0 }}</span>
+            <span class="stat-value">{{ profileUser.recipeCount ?? 0 }}</span>
             <span class="stat-label">Recipes</span>
           </div>
           <div class="stat-item">
-            <span class="stat-value">{{ authService.currentUser()?.totalVoteScore ?? 0 }}</span>
+            <span class="stat-value">{{ profileUser.totalVoteScore ?? 0 }}</span>
             <span class="stat-label">Total Votes</span>
           </div>
         </div>

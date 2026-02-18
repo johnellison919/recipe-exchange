@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
+import { ProfileContextService } from '../../../core/profile-context.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,6 +11,7 @@ import { AuthService } from '../../../core/auth.service';
 })
 export class SidebarComponent {
   protected readonly authService = inject(AuthService);
+  protected readonly profileContext = inject(ProfileContextService);
   private readonly router = inject(Router);
 
   protected get isOnNewRecipePage(): boolean {
