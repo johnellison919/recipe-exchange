@@ -18,7 +18,6 @@ export class RegisterComponent {
   protected readonly registerForm = this.formBuilder.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    displayName: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 

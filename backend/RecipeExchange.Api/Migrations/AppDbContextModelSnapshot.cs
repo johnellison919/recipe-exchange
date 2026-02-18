@@ -104,11 +104,6 @@ namespace RecipeExchange.Api.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)

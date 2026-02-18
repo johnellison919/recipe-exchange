@@ -10,13 +10,13 @@
             <img
               class="user-avatar"
               [src]="authService.currentUser()?.avatarUrl"
-              [alt]="authService.currentUser()?.displayName"
+              [alt]="authService.currentUser()?.username"
             />
           </button>
           @if (dropdownOpen()) {
             <div class="user-dropdown">
               <a
-                routerLink="/profile/{{ authService.currentUser()?.displayName }}"
+                routerLink="/profile/{{ authService.currentUser()?.username }}"
                 class="dropdown-item"
                 (click)="dropdownOpen.set(false)"
                 >View Profile</a

@@ -18,17 +18,6 @@
       </div>
 
       <div class="form-group">
-        <label for="displayName">Display Name</label>
-        <input id="displayName" type="text" formControlName="displayName" placeholder="John Doe" />
-        @if (
-          registerForm.get('displayName')?.hasError('required') &&
-          registerForm.get('displayName')?.touched
-        ) {
-          <span class="field-error">Display name is required</span>
-        }
-      </div>
-
-      <div class="form-group">
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
         @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {

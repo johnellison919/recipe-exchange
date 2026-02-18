@@ -26,12 +26,12 @@
           @if (recipe().author.avatarUrl) {
             <img
               [src]="recipe().author.avatarUrl"
-              [alt]="recipe().author.displayName"
+              [alt]="recipe().author.username"
               class="author-avatar"
             />
           }
           <div class="author-details">
-            <span class="author-name">{{ recipe().author.displayName }}</span>
+            <span class="author-name">{{ recipe().author.username }}</span>
             <span class="recipe-time">{{ recipe().createdAt | relativeTime }}</span>
           </div>
         </div>
