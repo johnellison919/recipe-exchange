@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Recipe } from '../../../models/recipe.model';
 import { VoteButtonsComponent } from '../../../shared/components/vote-buttons/vote-buttons.component';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
+import { slugify } from '../../../shared/utils/slugify';
 
 @Component({
   selector: 'app-recipe-card',
@@ -13,6 +14,7 @@ import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 })
 export class RecipeCardComponent {
   recipe = input.required<Recipe>();
+  protected readonly slugify = slugify;
 
   onVoteChange(): void {
     // Vote change is handled by VoteButtonsComponent

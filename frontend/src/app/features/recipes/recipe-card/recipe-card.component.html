@@ -1,14 +1,14 @@
 <div class="recipe-card">
   <div class="recipe-card-content">
     @if (recipe().imageUrl) {
-      <a [routerLink]="['/recipes', recipe().id]" class="image-link">
+      <a [routerLink]="['/recipes', recipe().id, slugify(recipe().title)]" class="image-link">
         <img [src]="recipe().imageUrl" [alt]="recipe().title" class="recipe-image" />
       </a>
     }
 
     <div class="recipe-body">
       <div class="recipe-header">
-        <a [routerLink]="['/recipes', recipe().id]" class="recipe-title-link">
+        <a [routerLink]="['/recipes', recipe().id, slugify(recipe().title)]" class="recipe-title-link">
           <h3 class="recipe-title">{{ recipe().title }}</h3>
         </a>
         <div class="recipe-meta">

@@ -1,0 +1,77 @@
+<div class="recipe-detail-page">
+  <a routerLink="/" class="back-link">← Back to recipes</a>
+
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else if (error()) {
+    <p class="error-message">{{ error() }}</p>
+  } @else if (recipe()) {
+    <article class="recipe-detail">
+      @if (recipe()!.imageUrl) {
+        <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" />
+      }
+
+      <div class="recipe-header">
+        <h1 class="recipe-title">{{ recipe()!.title }}</h1>
+
+        <div class="recipe-meta">
+          <span class="meta-tag category">{{ recipe()!.category }}</span>
+          <span class="meta-tag difficulty" [class]="'difficulty-' + recipe()!.difficulty">
+            {{ recipe()!.difficulty }}
+          </span>
+          <span class="meta-tag">{{ recipe()!.prepTime + recipe()!.cookTime }} min total</span>
+          <span class="meta-tag">{{ recipe()!.servings }} servings</span>
+        </div>
+
+        <div class="recipe-author">
+          @if (recipe()!.author.avatarUrl) {
+            <img
+              [src]="recipe()!.author.avatarUrl"
+              [alt]="recipe()!.author.username"
+              class="author-avatar"
+            />
+          }
+          <div class="author-details">
+            <span class="author-name">{{ recipe()!.author.username }}</span>
+            <span class="posted-time">{{ recipe()!.createdAt | relativeTime }}</span>
+          </div>
+        </div>
+
+        <app-vote-buttons
+          [recipeId]="recipe()!.id"
+          [voteScore]="recipe()!.voteScore"
+          [userVote]="recipe()!.userVote ?? null"
+          (voteChange)="onVoteChange()"
+        />
+      </div>
+
+      <p class="recipe-description">{{ recipe()!.description }}</p>
+
+      <div class="recipe-body">
+        <section class="ingredients-section">
+          <h2>Ingredients</h2>
+          <ul class="ingredients-list">
+            @for (ingredient of recipe()!.ingredients; track $index) {
+              <li class="ingredient-item">
+                <span class="ingredient-amount">{{ ingredient.amount }}</span>
+                @if (ingredient.unit) {
+                  <span class="ingredient-unit">{{ ingredient.unit }}</span>
+                }
+                <span class="ingredient-name">{{ ingredient.name }}</span>
+              </li>
+            }
+          </ul>
+        </section>
+
+        <section class="instructions-section">
+          <h2>Instructions</h2>
+          <ol class="instructions-list">
+            @for (step of recipe()!.instructions; track $index) {
+              <li class="instruction-item">{{ step }}</li>
+            }
+          </ol>
+        </section>
+      </div>
+    </article>
+  }
+</div>
