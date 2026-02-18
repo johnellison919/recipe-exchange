@@ -45,6 +45,21 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
 
     public async Task<User?> GetById(string id) => await db.Users.FindAsync(id);
 
+    public async Task<User?> GetByUsername(string username) =>
+        await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+    public async Task<UserProfileResponse> GetProfile(User user)
+    {
+        var recipeCount = await db.Recipes.CountAsync(r => r.AuthorId == user.Id);
+        var totalVoteScore = await db.Recipes
+            .Where(r => r.AuthorId == user.Id)
+            .SumAsync(r => r.VoteScore);
+
+        return new UserProfileResponse(
+            user.Id, user.Username, user.Email, user.AvatarUrl, user.Bio,
+            user.CreatedAt, recipeCount, totalVoteScore);
+    }
+
     public static UserResponse MapUser(User user) =>
         new(user.Id, user.Username, user.Email, user.AvatarUrl, user.Bio, user.CreatedAt);
 }
