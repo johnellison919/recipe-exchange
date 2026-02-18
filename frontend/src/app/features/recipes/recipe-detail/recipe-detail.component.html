@@ -37,12 +37,17 @@
           </div>
         </div>
 
-        <app-vote-buttons
-          [recipeId]="recipe()!.id"
-          [voteScore]="recipe()!.voteScore"
-          [userVote]="recipe()!.userVote ?? null"
-          (voteChange)="onVoteChange()"
-        />
+        <div class="recipe-actions">
+          <app-vote-buttons
+            [recipeId]="recipe()!.id"
+            [voteScore]="recipe()!.voteScore"
+            [userVote]="recipe()!.userVote ?? null"
+            (voteChange)="onVoteChange()"
+          />
+          @if (isAuthor()) {
+            <a [routerLink]="['/recipes', recipe()!.id, 'edit']" class="button button-outline edit-button">Edit Recipe</a>
+          }
+        </div>
       </div>
 
       <p class="recipe-description">{{ recipe()!.description }}</p>

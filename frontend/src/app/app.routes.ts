@@ -20,6 +20,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'recipes/:id/edit',
+    component: RecipeCreateComponent,
+    title: 'Edit Recipe - Recipe Exchange',
+    canActivate: [authGuard],
+  },
+  {
     path: 'recipes/:id/:slug',
     component: RecipeDetailComponent,
   },

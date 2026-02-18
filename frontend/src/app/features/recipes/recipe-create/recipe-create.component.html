@@ -1,8 +1,8 @@
 <div class="create-recipe">
   <div class="create-recipe-container">
     <div class="create-recipe-header">
-      <h1>New Recipe</h1>
-      <a routerLink="/" class="button button-outline">Cancel</a>
+      <h1>@if (editMode()) { Edit Recipe } @else { New Recipe }</h1>
+      <a [routerLink]="cancelLink()" class="button button-outline">Cancel</a>
     </div>
 
     @if (error()) {
@@ -118,7 +118,7 @@
       <div class="form-section">
         <h2>Ingredients</h2>
         <div formArrayName="ingredients">
-          @for (control of ingredients.controls; track $index) {
+          @for (control of ingredients.controls; track control) {
             <div class="ingredient-row" [formGroupName]="$index">
               <input
                 type="text"
@@ -155,7 +155,7 @@
       <div class="form-section">
         <h2>Instructions</h2>
         <div formArrayName="instructions">
-          @for (control of instructions.controls; track $index) {
+          @for (control of instructions.controls; track control) {
             <div class="instruction-row">
               <span class="step-number">{{ $index + 1 }}</span>
               <textarea
@@ -185,11 +185,11 @@
           [disabled]="submitting() || uploadingImage()"
         >
           @if (submitting()) {
-            Publishing...
+            @if (editMode()) { Saving... } @else { Publishing... }
           } @else if (uploadingImage()) {
             Uploading image...
           } @else {
-            Publish Recipe
+            @if (editMode()) { Save Changes } @else { Publish Recipe }
           }
         </button>
       </div>

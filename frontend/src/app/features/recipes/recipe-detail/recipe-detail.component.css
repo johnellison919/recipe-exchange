@@ -97,6 +97,18 @@
   color: var(--color-text-muted, #6b7280);
 }
 
+/* Actions row (votes + edit) */
+.recipe-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.edit-button {
+  font-size: 0.875rem;
+  padding: 0.375rem 0.875rem;
+}
+
 /* Description */
 .recipe-description {
   font-size: 1rem;
