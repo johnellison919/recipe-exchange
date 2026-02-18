@@ -21,10 +21,10 @@ public class RecipesController(RecipeService recipeService, VoteService voteServ
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] string? authorId)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Ok(await recipeService.GetAll(userId));
+        return Ok(await recipeService.GetAll(userId, authorId));
     }
 
     [HttpGet("{id}")]
