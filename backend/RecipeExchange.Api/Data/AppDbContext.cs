@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RecipeExchange.Api.Models;
 using System.Text.Json;
 
@@ -21,7 +22,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.HasIndex(u => u.Username).IsUnique();
             b.Property(u => u.Email).HasMaxLength(256);
             b.Property(u => u.Username).HasMaxLength(50);
-            b.Property(u => u.DisplayName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Recipe>(b =>
@@ -31,23 +31,36 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.Property(r => r.Difficulty).HasMaxLength(10);
             b.Property(r => r.Category).HasMaxLength(20);
 
+            var ingredientComparer = new ValueComparer<List<Ingredient>>(
+                (a, b) => JsonSerializer.Serialize(a, jsonOptions) == JsonSerializer.Serialize(b, jsonOptions),
+                v => JsonSerializer.Serialize(v, jsonOptions).GetHashCode(),
+                v => JsonSerializer.Deserialize<List<Ingredient>>(JsonSerializer.Serialize(v, jsonOptions), jsonOptions)!);
+
+            var stringListComparer = new ValueComparer<List<string>>(
+                (a, b) => JsonSerializer.Serialize(a, jsonOptions) == JsonSerializer.Serialize(b, jsonOptions),
+                v => JsonSerializer.Serialize(v, jsonOptions).GetHashCode(),
+                v => JsonSerializer.Deserialize<List<string>>(JsonSerializer.Serialize(v, jsonOptions), jsonOptions)!);
+
             b.Property(r => r.Ingredients)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, jsonOptions),
                     v => JsonSerializer.Deserialize<List<Ingredient>>(v, jsonOptions) ?? new())
-                .HasColumnType("json");
+                .HasColumnType("json")
+                .Metadata.SetValueComparer(ingredientComparer);
 
             b.Property(r => r.Instructions)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, jsonOptions),
                     v => JsonSerializer.Deserialize<List<string>>(v, jsonOptions) ?? new())
-                .HasColumnType("json");
+                .HasColumnType("json")
+                .Metadata.SetValueComparer(stringListComparer);
 
             b.Property(r => r.Tags)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, jsonOptions),
                     v => JsonSerializer.Deserialize<List<string>>(v, jsonOptions) ?? new())
-                .HasColumnType("json");
+                .HasColumnType("json")
+                .Metadata.SetValueComparer(stringListComparer);
 
             b.HasOne<User>()
                 .WithMany()
