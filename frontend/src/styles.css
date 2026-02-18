@@ -1,9 +1,9 @@
 :root {
-  --color-primary: #0d6efd;
+  --color-primary: #0158c3;
   --color-primary-light: color-mix(in oklab, var(--color-primary) 80%, #fff 15%);
   --color-primary-dark: color-mix(in oklab, var(--color-primary) 80%, #000 15%);
 
-  --color-secondary: #e07c09;
+  --color-secondary: #ee111b;
   --color-secondary-light: color-mix(in oklab, var(--color-secondary) 80%, #fff 15%);
   --color-secondary-dark: color-mix(in oklab, var(--color-secondary) 80%, #000 15%);
 
