@@ -1,0 +1,17 @@
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Local settings (machine-specific)
+appsettings.Development.json
+
+# Rider / VS Code / Visual Studio
+.vs/
+.idea/
+*.code-workspace
