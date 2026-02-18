@@ -44,6 +44,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         return (user, null);
     }
 
+    public async Task<User?> GetById(string id) => await db.Users.FindAsync(id);
+
     public static UserResponse MapUser(User user) =>
         new(user.Id, user.Username, user.Email, user.DisplayName, user.AvatarUrl, user.Bio, user.CreatedAt);
 }
