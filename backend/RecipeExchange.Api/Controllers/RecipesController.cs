@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecipeExchange.Api.Dtos;
+using RecipeExchange.Api.Models;
 using RecipeExchange.Api.Services;
 using System.Security.Claims;
 
@@ -10,6 +11,15 @@ namespace RecipeExchange.Api.Controllers;
 [Route("api/recipes")]
 public class RecipesController(RecipeService recipeService, VoteService voteService) : ControllerBase
 {
+    [HttpGet("categories")]
+    public IActionResult GetCategories()
+    {
+        var categories = Enum.GetNames<RecipeCategory>()
+            .Select(n => n.ToLower())
+            .ToArray();
+        return Ok(categories);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
