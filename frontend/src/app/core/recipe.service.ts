@@ -140,6 +140,12 @@ export class RecipeService {
       .pipe(map((r) => this.parseDates(r)));
   }
 
+  getRecipesByAuthor(authorId: string): Observable<Recipe[]> {
+    return this.http
+      .get<Recipe[]>('/api/recipes', { params: { authorId } })
+      .pipe(map((recipes) => recipes.map((r) => this.parseDates(r))));
+  }
+
   uploadImage(file: File): Observable<{ url: string }> {
     const formData = new FormData();
     formData.append('file', file);

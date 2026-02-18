@@ -6,6 +6,7 @@ import { RecipeFeedComponent } from './features/recipes/recipe-feed/recipe-feed.
 import { RecipeCreateComponent } from './features/recipes/recipe-create/recipe-create.component';
 import { RecipeDetailComponent } from './features/recipes/recipe-detail/recipe-detail.component';
 import { LoginComponent } from './features/auth/login/login.component';
+import { UserProfileComponent } from './features/profile/user-profile.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,10 @@ export const routes: Routes = [
   {
     path: 'recipes/:id/:slug',
     component: RecipeDetailComponent,
+  },
+  {
+    path: 'profile/:username',
+    component: UserProfileComponent,
   },
   {
     path: 'register',

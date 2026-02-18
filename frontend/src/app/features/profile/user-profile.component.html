@@ -1,0 +1,49 @@
+<div class="profile-page">
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else if (error()) {
+    <p class="error-message">{{ error() }}</p>
+  } @else if (profile()) {
+    <div class="profile-header">
+      @if (profile()!.avatarUrl) {
+        <img [src]="profile()!.avatarUrl" [alt]="profile()!.username" class="profile-avatar" />
+      }
+      <div class="profile-info">
+        <h1 class="profile-username">{{ profile()!.username }}</h1>
+        @if (profile()!.bio) {
+          <p class="profile-bio">{{ profile()!.bio }}</p>
+        }
+        <span class="profile-joined">Member since {{ profile()!.createdAt | relativeTime }}</span>
+      </div>
+    </div>
+
+    <div class="profile-stats">
+      <div class="stat">
+        <span class="stat-value">{{ profile()!.recipeCount ?? 0 }}</span>
+        <span class="stat-label">Recipes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ profile()!.totalVoteScore ?? 0 }}</span>
+        <span class="stat-label">Total Votes</span>
+      </div>
+    </div>
+
+    <div class="profile-awards">
+      <h2 class="section-heading">Awards</h2>
+      <p class="coming-soon">Coming soon</p>
+    </div>
+
+    <div class="profile-recipes">
+      <h2 class="section-heading">Recipes</h2>
+      @if (recipes().length === 0) {
+        <p class="empty-state">No recipes yet.</p>
+      } @else {
+        <div class="recipe-grid">
+          @for (recipe of recipes(); track recipe.id) {
+            <app-recipe-card [recipe]="recipe" />
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

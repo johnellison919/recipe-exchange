@@ -12,6 +12,25 @@
         >New Recipe</a>
       </div>
     }
+    @if (authService.isAuthenticated()) {
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Your Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-value">{{ authService.currentUser()?.recipeCount ?? 0 }}</span>
+            <span class="stat-label">Recipes</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ authService.currentUser()?.totalVoteScore ?? 0 }}</span>
+            <span class="stat-label">Total Votes</span>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Awards</h3>
+        <p class="coming-soon">Coming soon</p>
+      </div>
+    }
     <div class="sidebar-section">
       <h3 class="sidebar-heading">Recently Viewed</h3>
       <ul class="recent-recipes-list">

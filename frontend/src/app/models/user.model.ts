@@ -5,6 +5,8 @@ export interface User {
   avatarUrl?: string;
   bio?: string;
   createdAt: Date;
+  recipeCount?: number;
+  totalVoteScore?: number;
 }
 
 export interface UserRegistration {
