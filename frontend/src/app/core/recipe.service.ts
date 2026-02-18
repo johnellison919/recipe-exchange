@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, Injector, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { VoteService } from './vote.service';
 import { AuthService } from './auth.service';
@@ -193,7 +193,8 @@ const MOCK_RECIPES: Recipe[] = [
 export class RecipeService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private voteService?: VoteService; // Lazy injection to avoid circular dependency
+  private readonly injector = inject(Injector);
+  private voteService?: VoteService; // Resolved lazily to avoid circular dependency
 
   // State signals
   private readonly recipesSignal = signal<Recipe[]>([]);
@@ -303,9 +304,8 @@ export class RecipeService {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    // Lazy inject VoteService to avoid circular dependency
     if (!this.voteService) {
-      this.voteService = inject(VoteService);
+      this.voteService = this.injector.get(VoteService);
     }
 
     // TODO: Replace with real API call
@@ -319,6 +319,7 @@ export class RecipeService {
         }));
         this.recipesSignal.set(recipesWithVotes);
         this.loadingSignal.set(false);
+        this.captureSnapshot();
       },
       error: (error) => {
         this.errorSignal.set('Failed to load recipes');
