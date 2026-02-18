@@ -17,9 +17,7 @@
 }
 
 .error-message {
-  color: var(--color-danger);
   text-align: center;
-  padding: 2rem;
 }
 
 /* Image */

@@ -19,86 +19,7 @@
 }
 
 .create-recipe-header h1 {
-  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-gray-900);
-}
-
-.error-message {
-  background: color-mix(in oklab, var(--color-danger) 10%, transparent);
-  border: 1px solid var(--color-danger);
-  color: var(--color-danger);
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  font-size: 0.875rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  margin-bottom: 1.25rem;
-}
-
-.form-group label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-gray-700);
-}
-
-.optional {
-  font-weight: 400;
-  color: var(--color-gray-400);
-  font-size: 0.8125rem;
-}
-
-.create-recipe-container input,
-.create-recipe-container textarea,
-.create-recipe-container select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-gray-300);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  color: var(--color-gray-900);
-  background: var(--color-white);
-  transition: border-color 0.15s;
-  width: 100%;
-}
-
-.create-recipe-container input:focus,
-.create-recipe-container textarea:focus,
-.create-recipe-container select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-.create-recipe-container input.error,
-.create-recipe-container textarea.error,
-.create-recipe-container select.error {
-  border-color: var(--color-danger);
-}
-
-.field-error {
-  font-size: 0.8125rem;
-  color: var(--color-danger);
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-}
-
-.form-section {
-  margin-bottom: 1.75rem;
-}
-
-.form-section h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-gray-800);
-  margin-bottom: 0.75rem;
 }
 
 /* Image upload */
@@ -273,25 +194,4 @@
 
 .add-button:hover {
   color: var(--color-primary-dark);
-}
-
-/* Submit */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-gray-200);
-  margin-top: 0.5rem;
-}
-
-.submit-button {
-  padding: 0.625rem 1.5rem;
-  font-size: 0.9375rem;
-  cursor: pointer;
-  border: none;
-}
-
-.submit-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }

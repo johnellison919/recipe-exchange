@@ -36,7 +36,7 @@
         }
       </div>
 
-      <button type="submit" class="submit-button" [disabled]="registerForm.invalid || authLoading">
+      <button type="submit" class="button button-primary submit-button" [disabled]="registerForm.invalid || authLoading">
         @if (authLoading) {
           Creating account...
         } @else {
