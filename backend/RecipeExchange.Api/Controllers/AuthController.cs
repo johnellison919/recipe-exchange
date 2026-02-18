@@ -55,7 +55,8 @@ public class AuthController(AuthService authService) : ControllerBase
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var user = await authService.GetById(userId);
-        return user is null ? NotFound() : Ok(AuthService.MapUser(user));
+        if (user is null) return NotFound();
+        return Ok(await authService.GetProfile(user));
     }
 
     private static ClaimsPrincipal BuildPrincipal(User user)
