@@ -51,10 +51,11 @@ public class AuthController(AuthService authService) : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public IActionResult Me()
+    public async Task<IActionResult> Me()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Ok(new { userId });
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var user = await authService.GetById(userId);
+        return user is null ? NotFound() : Ok(AuthService.MapUser(user));
     }
 
     private static ClaimsPrincipal BuildPrincipal(User user)
