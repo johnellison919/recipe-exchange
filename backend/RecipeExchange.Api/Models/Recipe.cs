@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace RecipeExchange.Api.Models;
 
 public class Ingredient
@@ -9,7 +11,13 @@ public class Ingredient
 
 public class Recipe
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    private static readonly char[] IdChars =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+
+    private static string GenerateId() =>
+        new(Enumerable.Range(0, 7).Select(_ => IdChars[RandomNumberGenerator.GetInt32(IdChars.Length)]).ToArray());
+
+    public string Id { get; set; } = GenerateId();
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public List<Ingredient> Ingredients { get; set; } = [];
