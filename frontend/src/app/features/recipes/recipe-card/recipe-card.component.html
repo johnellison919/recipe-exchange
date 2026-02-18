@@ -1,0 +1,50 @@
+<div class="recipe-card">
+  <div class="recipe-card-content">
+    @if (recipe().imageUrl) {
+      <a [routerLink]="['/recipes', recipe().id]" class="image-link">
+        <img [src]="recipe().imageUrl" [alt]="recipe().title" class="recipe-image" />
+      </a>
+    }
+
+    <div class="recipe-body">
+      <div class="recipe-header">
+        <a [routerLink]="['/recipes', recipe().id]" class="recipe-title-link">
+          <h3 class="recipe-title">{{ recipe().title }}</h3>
+        </a>
+        <div class="recipe-meta">
+          <span class="category">{{ recipe().category }}</span>
+          <span class="difficulty" [class]="'difficulty-' + recipe().difficulty">
+            {{ recipe().difficulty }}
+          </span>
+        </div>
+      </div>
+
+      <p class="recipe-description">{{ recipe().description }}</p>
+
+      <div class="recipe-footer">
+        <div class="author-info">
+          @if (recipe().author.avatarUrl) {
+            <img
+              [src]="recipe().author.avatarUrl"
+              [alt]="recipe().author.displayName"
+              class="author-avatar"
+            />
+          }
+          <div class="author-details">
+            <span class="author-name">{{ recipe().author.displayName }}</span>
+            <span class="recipe-time">{{ recipe().createdAt | relativeTime }}</span>
+          </div>
+        </div>
+
+        <div class="recipe-actions">
+          <app-vote-buttons
+            [recipeId]="recipe().id"
+            [voteScore]="recipe().voteScore"
+            [userVote]="recipe().userVote ?? null"
+            (voteChange)="onVoteChange()"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
