@@ -1,0 +1,23 @@
+<div class="vote-buttons">
+  <button
+    type="button"
+    class="vote-button upvote"
+    [class.active]="isUpvoted"
+    [disabled]="!isAuthenticated"
+    (click)="onUpvote()"
+  >
+    Up
+  </button>
+  <span class="vote-score" [class.positive]="voteScore() > 0" [class.negative]="voteScore() < 0">
+    {{ voteScore() }}
+  </span>
+  <button
+    class="vote-button downvote"
+    [class.active]="isDownvoted"
+    [disabled]="!isAuthenticated"
+    (click)="onDownvote()"
+    [title]="isAuthenticated ? 'Downvote' : 'Login to vote'"
+  >
+    Down
+  </button>
+</div>
