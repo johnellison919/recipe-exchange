@@ -15,3 +15,6 @@ appsettings.Development.json
 .vs/
 .idea/
 *.code-workspace
+
+# Uploaded images
+wwwroot/uploads
