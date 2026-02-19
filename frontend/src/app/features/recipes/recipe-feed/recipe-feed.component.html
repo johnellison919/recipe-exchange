@@ -5,7 +5,20 @@
       <p class="feed-subtitle">Discover and share delicious recipes from our community</p>
     </div>
     <div class="category-container">
-      <button type="button" class="category">All</button>
+      <button
+        type="button"
+        class="category-button"
+        [class.active]="currentCategory === null"
+        (click)="setCategory(null)"
+      >All</button>
+      @for (cat of categories(); track cat) {
+        <button
+          type="button"
+          class="category-button"
+          [class.active]="currentCategory === cat"
+          (click)="setCategory($any(cat))"
+        >{{ cat | titlecase }}</button>
+      }
     </div>
     <div class="sort-container">
       <label for="sort-select" class="sort-label">Sort by:</label>

@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { RecipeService } from '../../../core/recipe.service';
 import { RecipeCategory } from '../../../models/recipe.model';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
@@ -13,9 +14,15 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 })
 export class RecipeFeedComponent {
   protected readonly recipeService = inject(RecipeService);
+  private readonly http = inject(HttpClient);
+
+  protected readonly categories = signal<string[]>([]);
 
   ngOnInit(): void {
     this.recipeService.loadRecipes();
+    this.http.get<string[]>('/api/recipes/categories').subscribe({
+      next: (cats) => this.categories.set(cats),
+    });
   }
 
   get recipes() {
