@@ -33,13 +33,17 @@
     }
     <div class="sidebar-section">
       <h3 class="sidebar-heading">Recently Viewed</h3>
-      <ul class="recent-recipes-list">
-        <li class="recent-recipe-item">Item 1</li>
-        <li class="recent-recipe-item">Item 2</li>
-        <li class="recent-recipe-item">Item 3</li>
-        <li class="recent-recipe-item">Item 4</li>
-        <li class="recent-recipe-item">Item 5</li>
-      </ul>
+      @if (recentlyViewed.entries().length === 0) {
+        <p class="coming-soon">No recipes viewed yet</p>
+      } @else {
+        <ul class="recent-recipes-list">
+          @for (entry of recentlyViewed.entries(); track entry.id) {
+            <li class="recent-recipe-item">
+              <a [routerLink]="recipeLink(entry)">{{ entry.title }}</a>
+            </li>
+          }
+        </ul>
+      }
     </div>
   </div>
 </aside>

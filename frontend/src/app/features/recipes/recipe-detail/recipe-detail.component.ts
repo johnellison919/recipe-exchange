@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { RecipeService } from '../../../core/recipe.service';
 import { AuthService } from '../../../core/auth.service';
+import { RecentlyViewedService } from '../../../core/recently-viewed.service';
 import { VoteButtonsComponent } from '../../../shared/components/vote-buttons/vote-buttons.component';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
@@ -26,6 +27,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   private readonly recipeService = inject(RecipeService);
   private readonly authService = inject(AuthService);
   private readonly titleService = inject(Title);
+  private readonly recentlyViewed = inject(RecentlyViewedService);
 
   protected readonly recipe = this.recipeService.selectedRecipe;
   protected readonly loading = this.recipeService.loading;
@@ -41,6 +43,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       const r = this.recipe();
       if (r) {
         this.titleService.setTitle(`${r.title} - Recipe Exchange`);
+        this.recentlyViewed.add({ id: r.id, title: r.title });
       }
     });
   }
