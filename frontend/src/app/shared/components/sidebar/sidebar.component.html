@@ -2,7 +2,21 @@
   <div class="sidebar-container">
     <div class="sidebar-section">
       <label for="search-input" class="search-label">Search Recipes</label>
-      <input id="search-input" type="text" class="search-input" placeholder="Search" />
+      <div class="search-wrapper">
+        <input
+          id="search-input"
+          type="text"
+          class="search-input"
+          placeholder="Search recipes..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          (keydown.enter)="search()"
+        />
+        @if (searchQuery()) {
+          <button type="button" class="search-clear" (click)="clearSearch()">&times;</button>
+        }
+      </div>
+      <button type="button" class="button button-primary search-button" (click)="search()">Search</button>
     </div>
     @if (!isOnNewRecipePage) {
       <div class="sidebar-section">

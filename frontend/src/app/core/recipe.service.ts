@@ -40,6 +40,7 @@ export class RecipeService {
           (r) =>
             r.title.toLowerCase().includes(searchQuery) ||
             r.description.toLowerCase().includes(searchQuery) ||
+            r.author.username.toLowerCase().includes(searchQuery) ||
             r.tags.some((tag) => tag.toLowerCase().includes(searchQuery)),
         );
       }
@@ -63,6 +64,7 @@ export class RecipeService {
         (r) =>
           r.title.toLowerCase().includes(searchQuery) ||
           r.description.toLowerCase().includes(searchQuery) ||
+          r.author.username.toLowerCase().includes(searchQuery) ||
           r.tags.some((tag) => tag.toLowerCase().includes(searchQuery)),
       );
     }
