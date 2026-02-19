@@ -14,7 +14,7 @@ export class RecipeService {
   private readonly selectedRecipeSignal = signal<Recipe | null>(null);
   private readonly errorSignal = signal<string | null>(null);
   private readonly categoryFilterSignal = signal<RecipeCategory | null>(null);
-  private readonly sortBySignal = signal<'newest' | 'top-rated'>('newest');
+  private readonly sortBySignal = signal<'newest' | 'top-rated'>('top-rated');
   private readonly sortSnapshotSignal = signal<Recipe[] | null>(null);
   private readonly allowResortSignal = signal<boolean>(true);
   private readonly searchQuerySignal = signal<string>('');
