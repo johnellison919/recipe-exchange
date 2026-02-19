@@ -20,6 +20,39 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+}
+
+.save-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  background: rgb(255 255 255 / 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-gray-400);
+  transition: color 0.15s, background 0.15s;
+  padding: 0;
+}
+
+.save-button:hover {
+  background: rgb(255 255 255 / 1);
+  color: #eab308;
+}
+
+.save-button.saved {
+  color: #eab308;
+}
+
+.save-button.saved:hover {
+  color: #ca8a04;
 }
 
 .image-link {

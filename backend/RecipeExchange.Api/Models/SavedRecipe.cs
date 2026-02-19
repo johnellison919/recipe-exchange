@@ -1,0 +1,9 @@
+namespace RecipeExchange.Api.Models;
+
+public class SavedRecipe
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string UserId { get; set; } = string.Empty;
+    public string RecipeId { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}

@@ -20,7 +20,8 @@ public record RecipeResponse(
     DateTime CreatedAt,
     DateTime UpdatedAt,
     int VoteScore,
-    string? UserVote);
+    string? UserVote,
+    bool IsSaved);
 
 public record CreateRecipeRequest(
     string Title,

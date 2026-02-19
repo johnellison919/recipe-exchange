@@ -9,7 +9,7 @@ namespace RecipeExchange.Api.Controllers;
 
 [ApiController]
 [Route("api/recipes")]
-public class RecipesController(RecipeService recipeService, VoteService voteService) : ControllerBase
+public class RecipesController(RecipeService recipeService, VoteService voteService, SavedRecipeService savedRecipeService) : ControllerBase
 {
     [HttpGet("categories")]
     public IActionResult GetCategories()
@@ -79,5 +79,22 @@ public class RecipesController(RecipeService recipeService, VoteService voteServ
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var result = await voteService.Vote(id, userId, request.VoteType);
         return result is null ? NotFound() : Ok(result);
+    }
+
+    [Authorize]
+    [HttpPost("{id}/save")]
+    public async Task<IActionResult> ToggleSave(string id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var result = await savedRecipeService.ToggleSave(id, userId);
+        return result is null ? NotFound() : Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("saved")]
+    public async Task<IActionResult> GetSaved()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        return Ok(await recipeService.GetSaved(userId));
     }
 }

@@ -82,6 +82,22 @@
   color: var(--color-gray-500);
 }
 
+.sidebar-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-700);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-link:hover {
+  background: var(--color-gray-100);
+  color: var(--color-primary);
+}
+
 .coming-soon {
   font-size: 0.8125rem;
   color: var(--color-gray-400);

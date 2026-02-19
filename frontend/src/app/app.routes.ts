@@ -7,6 +7,7 @@ import { RecipeCreateComponent } from './features/recipes/recipe-create/recipe-c
 import { RecipeDetailComponent } from './features/recipes/recipe-detail/recipe-detail.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { UserProfileComponent } from './features/profile/user-profile.component';
+import { SavedRecipesComponent } from './features/saved/saved-recipes.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,12 @@ export const routes: Routes = [
   {
     path: 'recipes/:id/:slug',
     component: RecipeDetailComponent,
+  },
+  {
+    path: 'saved',
+    component: SavedRecipesComponent,
+    title: 'Saved Recipes - Recipe Exchange',
+    canActivate: [authGuard],
   },
   {
     path: 'profile/:username',

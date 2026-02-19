@@ -26,6 +26,11 @@
         >New Recipe</a>
       </div>
     }
+    @if (authService.isAuthenticated()) {
+      <div class="sidebar-section">
+        <a routerLink="/saved" class="sidebar-link">Saved Recipes</a>
+      </div>
+    }
     @if (profileContext.user(); as profileUser) {
       <div class="sidebar-section">
         <h3 class="sidebar-heading">{{ profileUser.username }}'s Stats</h3>

@@ -211,6 +211,22 @@ export class RecipeService {
     }
   }
 
+  updateRecipeSavedStatus(recipeId: string, isSaved: boolean): void {
+    const snapshot = this.sortSnapshotSignal();
+    if (snapshot) {
+      this.sortSnapshotSignal.set(
+        snapshot.map((r) => (r.id === recipeId ? { ...r, isSaved } : r)),
+      );
+    }
+    this.recipesSignal.update((recipes) =>
+      recipes.map((r) => (r.id === recipeId ? { ...r, isSaved } : r)),
+    );
+    const selected = this.selectedRecipeSignal();
+    if (selected?.id === recipeId) {
+      this.selectedRecipeSignal.set({ ...selected, isSaved });
+    }
+  }
+
   setCategoryFilter(category: RecipeCategory | null): void {
     this.categoryFilterSignal.set(category);
     this.allowResortSignal.set(true);

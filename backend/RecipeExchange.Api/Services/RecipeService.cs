@@ -25,9 +25,17 @@ public class RecipeService(AppDbContext db)
                 .ToDictionaryAsync(v => v.RecipeId, v => v.VoteType)
             : [];
 
+        var savedIds = userId is not null
+            ? (await db.SavedRecipes
+                .Where(s => s.UserId == userId)
+                .Select(s => s.RecipeId)
+                .ToListAsync())
+                .ToHashSet()
+            : new HashSet<string>();
+
         return recipes
             .Where(r => authors.ContainsKey(r.AuthorId))
-            .Select(r => MapRecipe(r, authors[r.AuthorId], userVotes.GetValueOrDefault(r.Id)))
+            .Select(r => MapRecipe(r, authors[r.AuthorId], userVotes.GetValueOrDefault(r.Id), savedIds.Contains(r.Id)))
             .ToList();
     }
 
@@ -46,7 +54,10 @@ public class RecipeService(AppDbContext db)
                 .FirstOrDefaultAsync()
             : null;
 
-        return MapRecipe(recipe, author, userVote);
+        var isSaved = userId is not null
+            && await db.SavedRecipes.AnyAsync(s => s.UserId == userId && s.RecipeId == id);
+
+        return MapRecipe(recipe, author, userVote, isSaved);
     }
 
     public async Task<RecipeResponse> Create(CreateRecipeRequest request, string authorId)
@@ -78,7 +89,7 @@ public class RecipeService(AppDbContext db)
         await db.SaveChangesAsync();
 
         var author = (await db.Users.FindAsync(authorId))!;
-        return MapRecipe(recipe, author, "upvote");
+        return MapRecipe(recipe, author, "upvote", false);
     }
 
     public async Task<(RecipeResponse? result, string? error)> Update(
@@ -112,7 +123,42 @@ public class RecipeService(AppDbContext db)
             .Select(v => v.VoteType)
             .FirstOrDefaultAsync();
 
-        return (MapRecipe(recipe, author, userVote), null);
+        var isSaved = await db.SavedRecipes.AnyAsync(s => s.UserId == userId && s.RecipeId == id);
+
+        return (MapRecipe(recipe, author, userVote, isSaved), null);
+    }
+
+    public async Task<List<RecipeResponse>> GetSaved(string userId)
+    {
+        var savedRecipeIds = await db.SavedRecipes
+            .Where(s => s.UserId == userId)
+            .OrderByDescending(s => s.CreatedAt)
+            .Select(s => s.RecipeId)
+            .ToListAsync();
+
+        var recipes = await db.Recipes
+            .Where(r => savedRecipeIds.Contains(r.Id))
+            .ToListAsync();
+
+        var authorIds = recipes.Select(r => r.AuthorId).Distinct().ToList();
+        var authors = await db.Users
+            .Where(u => authorIds.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id);
+
+        var userVotes = await db.Votes
+            .Where(v => v.UserId == userId)
+            .ToDictionaryAsync(v => v.RecipeId, v => v.VoteType);
+
+        var recipeMap = recipes.ToDictionary(r => r.Id);
+
+        return savedRecipeIds
+            .Where(id => recipeMap.ContainsKey(id) && authors.ContainsKey(recipeMap[id].AuthorId))
+            .Select(id =>
+            {
+                var r = recipeMap[id];
+                return MapRecipe(r, authors[r.AuthorId], userVotes.GetValueOrDefault(r.Id), true);
+            })
+            .ToList();
     }
 
     public async Task<string?> Delete(string id, string userId)
@@ -126,12 +172,12 @@ public class RecipeService(AppDbContext db)
         return null;
     }
 
-    public static RecipeResponse MapRecipe(Recipe recipe, User author, string? userVote) =>
+    public static RecipeResponse MapRecipe(Recipe recipe, User author, string? userVote, bool isSaved = false) =>
         new(
             recipe.Id, recipe.Title, recipe.Description,
             recipe.Ingredients.Select(i => new IngredientDto(i.Name, i.Amount, i.Unit)).ToList(),
             recipe.Instructions, recipe.PrepTime, recipe.CookTime, recipe.Servings,
             recipe.Difficulty, recipe.Category, recipe.Tags, recipe.ImageUrl,
             recipe.AuthorId, AuthService.MapUser(author),
-            recipe.CreatedAt, recipe.UpdatedAt, recipe.VoteScore, userVote);
+            recipe.CreatedAt, recipe.UpdatedAt, recipe.VoteScore, userVote, isSaved);
 }

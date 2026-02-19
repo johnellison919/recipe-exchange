@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users => Set<User>();
     public DbSet<Recipe> Recipes => Set<Recipe>();
     public DbSet<Vote> Votes => Set<Vote>();
+    public DbSet<SavedRecipe> SavedRecipes => Set<SavedRecipe>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,6 +83,22 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.HasOne<Recipe>()
                 .WithMany()
                 .HasForeignKey(v => v.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<SavedRecipe>(b =>
+        {
+            b.HasKey(s => s.Id);
+            b.HasIndex(s => new { s.UserId, s.RecipeId }).IsUnique();
+
+            b.HasOne<User>()
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne<Recipe>()
+                .WithMany()
+                .HasForeignKey(s => s.RecipeId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

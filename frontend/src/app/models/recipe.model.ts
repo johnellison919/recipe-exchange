@@ -37,6 +37,7 @@ export interface Recipe {
   updatedAt: Date;
   voteScore: number; // net upvotes - downvotes
   userVote?: VoteType; // current user's vote status
+  isSaved?: boolean; // whether current user has saved this recipe
 }
 
 export interface RecipeCreate {

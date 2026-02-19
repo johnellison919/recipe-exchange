@@ -1,0 +1,22 @@
+<div class="saved-page">
+  <div class="saved-header">
+    <h1>Saved Recipes</h1>
+    <p class="saved-subtitle">Recipes you've saved for later</p>
+  </div>
+
+  @if (loading()) {
+    <app-loading-spinner />
+  } @else {
+    @if (recipes().length === 0) {
+      <div class="empty-state">
+        <p>You haven't saved any recipes yet. Click the star on any recipe card to save it!</p>
+      </div>
+    } @else {
+      <div class="recipe-grid">
+        @for (recipe of recipes(); track recipe.id) {
+          <app-recipe-card [recipe]="recipe" />
+        }
+      </div>
+    }
+  }
+</div>
