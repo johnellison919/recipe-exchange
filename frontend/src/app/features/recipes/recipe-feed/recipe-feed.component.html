@@ -20,17 +20,34 @@
         >{{ cat | titlecase }}</button>
       }
     </div>
-    <div class="sort-container">
-      <label for="sort-select" class="sort-label">Sort by:</label>
-      <select
-        id="sort-select"
-        class="sort-dropdown"
-        [value]="currentSort"
-        (change)="setSortBy($any($event.target).value)"
-      >
-        <option value="newest">Newest</option>
-        <option value="top-rated">Top Rated</option>
-      </select>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="sort-select" class="filter-label">Sort by:</label>
+        <select
+          id="sort-select"
+          class="filter-dropdown"
+          [value]="currentSort"
+          (change)="setSortBy($any($event.target).value)"
+        >
+          <option value="newest">Newest</option>
+          <option value="top-rated">Top Rated</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="date-range-select" class="filter-label">Date:</label>
+        <select
+          id="date-range-select"
+          class="filter-dropdown"
+          [value]="currentDateRange"
+          (change)="setDateRange($any($event.target).value)"
+        >
+          <option value="all-time">All Time</option>
+          <option value="today">Today</option>
+          <option value="this-week">This Week</option>
+          <option value="this-month">This Month</option>
+          <option value="this-year">This Year</option>
+        </select>
+      </div>
     </div>
     @if (loading) {
       <app-loading-spinner />

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RecipeService } from '../../../core/recipe.service';
+import { DateRange, RecipeService } from '../../../core/recipe.service';
 import { RecipeCategory } from '../../../models/recipe.model';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { CommonModule } from '@angular/common';
@@ -41,6 +41,10 @@ export class RecipeFeedComponent {
     return this.recipeService.sortBy();
   }
 
+  get currentDateRange() {
+    return this.recipeService.dateRange();
+  }
+
   setCategory(category: RecipeCategory | null): void {
     this.recipeService.setCategoryFilter(category);
     setTimeout(() => {
@@ -50,6 +54,13 @@ export class RecipeFeedComponent {
 
   setSortBy(sortBy: 'newest' | 'top-rated'): void {
     this.recipeService.setSortBy(sortBy);
+    setTimeout(() => {
+      this.recipeService.captureSnapshot();
+    }, 100);
+  }
+
+  setDateRange(dateRange: DateRange): void {
+    this.recipeService.setDateRange(dateRange);
     setTimeout(() => {
       this.recipeService.captureSnapshot();
     }, 100);

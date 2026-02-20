@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap, map } from 'rxjs';
 import { Recipe, RecipeCategory, RecipeCreate, RecipeUpdate } from '../models/recipe.model';
 
+export type DateRange = 'today' | 'this-week' | 'this-month' | 'this-year' | 'all-time';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,6 +20,7 @@ export class RecipeService {
   private readonly sortSnapshotSignal = signal<Recipe[] | null>(null);
   private readonly allowResortSignal = signal<boolean>(true);
   private readonly searchQuerySignal = signal<string>('');
+  private readonly dateRangeSignal = signal<DateRange>('all-time');
 
   readonly recipes = this.recipesSignal.asReadonly();
   readonly loading = this.loadingSignal.asReadonly();
@@ -25,6 +28,7 @@ export class RecipeService {
   readonly error = this.errorSignal.asReadonly();
   readonly categoryFilter = this.categoryFilterSignal.asReadonly();
   readonly sortBy = this.sortBySignal.asReadonly();
+  readonly dateRange = this.dateRangeSignal.asReadonly();
 
   readonly filteredAndSortedRecipes = computed(() => {
     const snapshot = this.sortSnapshotSignal();
@@ -34,6 +38,7 @@ export class RecipeService {
       let filtered = snapshot;
       const searchQuery = this.searchQuerySignal().toLowerCase();
       const category = this.categoryFilterSignal();
+      const dateRange = this.dateRangeSignal();
 
       if (searchQuery) {
         filtered = filtered.filter(
@@ -47,6 +52,10 @@ export class RecipeService {
       if (category) {
         filtered = filtered.filter((r) => r.category === category);
       }
+      if (dateRange !== 'all-time') {
+        const cutoff = this.getDateRangeCutoff(dateRange);
+        filtered = filtered.filter((r) => r.createdAt >= cutoff);
+      }
 
       return filtered.map((r) => {
         const current = this.recipesSignal().find((cr) => cr.id === r.id);
@@ -58,6 +67,7 @@ export class RecipeService {
     const category = this.categoryFilterSignal();
     const sortBy = this.sortBySignal();
     const searchQuery = this.searchQuerySignal().toLowerCase();
+    const dateRange = this.dateRangeSignal();
 
     if (searchQuery) {
       recipes = recipes.filter(
@@ -70,6 +80,10 @@ export class RecipeService {
     }
     if (category) {
       recipes = recipes.filter((r) => r.category === category);
+    }
+    if (dateRange !== 'all-time') {
+      const cutoff = this.getDateRangeCutoff(dateRange);
+      recipes = recipes.filter((r) => r.createdAt >= cutoff);
     }
     if (sortBy === 'newest') {
       recipes.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -239,6 +253,12 @@ export class RecipeService {
     this.sortSnapshotSignal.set(null);
   }
 
+  setDateRange(dateRange: DateRange): void {
+    this.dateRangeSignal.set(dateRange);
+    this.allowResortSignal.set(true);
+    this.sortSnapshotSignal.set(null);
+  }
+
   setSearchQuery(query: string): void {
     this.searchQuerySignal.set(query);
   }
@@ -254,6 +274,31 @@ export class RecipeService {
 
   clearError(): void {
     this.errorSignal.set(null);
+  }
+
+  private getDateRangeCutoff(dateRange: DateRange): Date {
+    const now = new Date();
+    switch (dateRange) {
+      case 'today': {
+        const d = new Date(now);
+        d.setHours(0, 0, 0, 0);
+        return d;
+      }
+      case 'this-week': {
+        const d = new Date(now);
+        d.setDate(d.getDate() - d.getDay());
+        d.setHours(0, 0, 0, 0);
+        return d;
+      }
+      case 'this-month': {
+        return new Date(now.getFullYear(), now.getMonth(), 1);
+      }
+      case 'this-year': {
+        return new Date(now.getFullYear(), 0, 1);
+      }
+      default:
+        return new Date(0);
+    }
   }
 
   private parseDates(recipe: any): Recipe {
