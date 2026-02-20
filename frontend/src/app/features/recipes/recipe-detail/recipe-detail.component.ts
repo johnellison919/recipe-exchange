@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { RecipeService } from '../../../core/recipe.service';
 import { AuthService } from '../../../core/auth.service';
+import { SavedRecipeService } from '../../../core/saved-recipe.service';
 import { RecentlyViewedService } from '../../../core/recently-viewed.service';
 import { VoteButtonsComponent } from '../../../shared/components/vote-buttons/vote-buttons.component';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
@@ -27,6 +28,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   private readonly recipeService = inject(RecipeService);
   private readonly authService = inject(AuthService);
   private readonly titleService = inject(Title);
+  private readonly savedRecipeService = inject(SavedRecipeService);
   private readonly recentlyViewed = inject(RecentlyViewedService);
 
   protected readonly recipe = this.recipeService.selectedRecipe;
@@ -35,6 +37,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   protected readonly isAuthor = computed(
     () => this.recipe()?.authorId === this.authService.currentUser()?.id,
   );
+  protected readonly isAuthenticated = this.authService.isAuthenticated;
 
   private paramSub?: Subscription;
 
@@ -63,4 +66,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   onVoteChange(): void {}
+
+  onToggleSave(): void {
+    const r = this.recipe();
+    if (!this.isAuthenticated() || !r) return;
+    this.savedRecipeService.toggleSave(r.id).subscribe();
+  }
 }
