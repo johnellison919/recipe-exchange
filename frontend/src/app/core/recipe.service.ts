@@ -29,6 +29,7 @@ export class RecipeService {
   readonly categoryFilter = this.categoryFilterSignal.asReadonly();
   readonly sortBy = this.sortBySignal.asReadonly();
   readonly dateRange = this.dateRangeSignal.asReadonly();
+  readonly searchQuery = this.searchQuerySignal.asReadonly();
 
   readonly filteredAndSortedRecipes = computed(() => {
     const snapshot = this.sortSnapshotSignal();

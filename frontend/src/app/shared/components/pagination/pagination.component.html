@@ -1,0 +1,36 @@
+@if (totalPages() > 1) {
+  <nav class="pagination" aria-label="Pagination">
+    <span class="pagination-info">{{ rangeText() }}</span>
+    <div class="pagination-controls">
+      <button
+        type="button"
+        class="pagination-btn"
+        [disabled]="currentPage() === 1"
+        (click)="goToPage(currentPage() - 1)"
+        aria-label="Previous page"
+      >&laquo; Prev</button>
+
+      @for (page of pages(); track $index) {
+        @if (page === -1) {
+          <span class="pagination-ellipsis" aria-hidden="true">&hellip;</span>
+        } @else {
+          <button
+            type="button"
+            class="pagination-btn"
+            [class.active]="page === currentPage()"
+            [attr.aria-current]="page === currentPage() ? 'page' : null"
+            (click)="goToPage(page)"
+          >{{ page }}</button>
+        }
+      }
+
+      <button
+        type="button"
+        class="pagination-btn"
+        [disabled]="currentPage() === totalPages()"
+        (click)="goToPage(currentPage() + 1)"
+        aria-label="Next page"
+      >Next &raquo;</button>
+    </div>
+  </nav>
+}

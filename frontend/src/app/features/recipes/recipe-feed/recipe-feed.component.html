@@ -52,16 +52,22 @@
     @if (loading) {
       <app-loading-spinner />
     } @else {
-      @if (recipes.length === 0) {
+      @if (totalRecipes() === 0) {
         <div class="empty-state">
           <p>No recipes found. Be the first to share a recipe!</p>
         </div>
       } @else {
         <div class="recipe-grid">
-          @for (recipe of recipes; track recipe.id) {
+          @for (recipe of paginatedRecipes(); track recipe.id) {
             <app-recipe-card [recipe]="recipe" />
           }
         </div>
+        <app-pagination
+          [totalItems]="totalRecipes()"
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)"
+        />
       }
     }
   </div>

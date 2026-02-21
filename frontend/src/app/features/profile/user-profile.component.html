@@ -21,10 +21,16 @@
         <p class="empty-state">No recipes yet.</p>
       } @else {
         <div class="recipe-grid">
-          @for (recipe of recipes(); track recipe.id) {
+          @for (recipe of paginatedRecipes(); track recipe.id) {
             <app-recipe-card [recipe]="recipe" />
           }
         </div>
+        <app-pagination
+          [totalItems]="recipes().length"
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)"
+        />
       }
     </div>
   }
