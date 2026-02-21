@@ -37,18 +37,20 @@ export class AuthService {
       }
     }
 
-    // Verify the cookie session is still valid
-    this.http.get<User>('/api/auth/me').subscribe({
-      next: (user) => {
-        user.createdAt = new Date(user.createdAt);
-        this.currentUserSignal.set(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
-      },
-      error: () => {
-        this.currentUserSignal.set(null);
-        localStorage.removeItem('currentUser');
-      },
-    });
+    // Verify the cookie session is still valid (only if we have a stored user)
+    if (this.currentUserSignal()) {
+      this.http.get<User>('/api/auth/me').subscribe({
+        next: (user) => {
+          user.createdAt = new Date(user.createdAt);
+          this.currentUserSignal.set(user);
+          localStorage.setItem('currentUser', JSON.stringify(user));
+        },
+        error: () => {
+          this.currentUserSignal.set(null);
+          localStorage.removeItem('currentUser');
+        },
+      });
+    }
   }
 
   login(credentials: UserLogin): Observable<User> {
