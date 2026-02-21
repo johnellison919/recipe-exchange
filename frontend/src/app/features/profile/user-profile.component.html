@@ -5,9 +5,7 @@
     <p class="error-message">{{ error() }}</p>
   } @else if (profile()) {
     <div class="profile-header">
-      @if (profile()!.avatarUrl) {
-        <img [src]="profile()!.avatarUrl" [alt]="profile()!.username" class="profile-avatar" />
-      }
+      <img [src]="getAvatarUrl(profile()!.avatarUrl, profile()!.username)" [alt]="profile()!.username" class="profile-avatar" />
       <div class="profile-info">
         <h1 class="profile-username">{{ profile()!.username }}</h1>
         @if (profile()!.bio) {

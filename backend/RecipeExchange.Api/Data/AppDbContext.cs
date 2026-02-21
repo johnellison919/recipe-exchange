@@ -25,6 +25,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.Property(u => u.Username).HasMaxLength(50);
             b.Property(u => u.EmailConfirmationToken).HasMaxLength(128);
             b.Property(u => u.PasswordResetToken).HasMaxLength(128);
+            b.Property(u => u.PendingEmail).HasMaxLength(256);
+            b.Property(u => u.EmailChangeToken).HasMaxLength(128);
         });
 
         modelBuilder.Entity<Recipe>(b =>

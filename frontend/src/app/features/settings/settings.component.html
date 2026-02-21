@@ -1,0 +1,140 @@
+<div class="settings">
+  <div class="settings-container">
+    <h1>Settings</h1>
+
+    <!-- Avatar Section -->
+    <section class="settings-section">
+      <h2>Avatar</h2>
+      @if (avatarError()) {
+        <div class="error-message">{{ avatarError() }}</div>
+      }
+      @if (avatarSuccess()) {
+        <div class="success-message">{{ avatarSuccess() }}</div>
+      }
+      <div class="avatar-section">
+        <img class="avatar-preview" [src]="avatarPreview()" alt="Avatar preview" />
+        <div class="avatar-controls">
+          <div class="form-group">
+            <label for="avatarUrl">Image URL</label>
+            <input
+              id="avatarUrl"
+              type="url"
+              [value]="avatarUrlInput()"
+              (input)="onAvatarUrlChange($any($event.target).value)"
+              placeholder="https://example.com/avatar.jpg"
+            />
+          </div>
+          <div class="avatar-buttons">
+            <label class="button button-outline file-upload-label">
+              Upload Image
+              <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+            </label>
+            <button class="button button-outline" (click)="resetAvatar()" [disabled]="avatarLoading()">
+              Reset to Default
+            </button>
+          </div>
+          <button
+            class="button button-primary"
+            (click)="saveAvatar()"
+            [disabled]="avatarLoading()"
+          >
+            @if (avatarLoading()) {
+              Saving...
+            } @else {
+              Save Avatar
+            }
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Email Section -->
+    <section class="settings-section">
+      <h2>Email</h2>
+      <p class="current-value">Current email: <strong>{{ authService.currentUser()?.email }}</strong></p>
+      @if (emailError()) {
+        <div class="error-message">{{ emailError() }}</div>
+      }
+      @if (emailSuccess()) {
+        <div class="success-message">{{ emailSuccess() }}</div>
+      }
+      <form [formGroup]="emailForm" (ngSubmit)="submitEmail()">
+        <div class="form-group">
+          <label for="newEmail">New Email</label>
+          <input id="newEmail" type="email" formControlName="newEmail" placeholder="new@example.com" />
+          @if (emailForm.get('newEmail')?.hasError('email') && emailForm.get('newEmail')?.touched) {
+            <span class="field-error">Please enter a valid email address</span>
+          }
+        </div>
+        <button
+          type="submit"
+          class="button button-primary submit-button"
+          [disabled]="emailForm.invalid || emailLoading()"
+        >
+          @if (emailLoading()) {
+            Sending...
+          } @else {
+            Change Email
+          }
+        </button>
+      </form>
+    </section>
+
+    <!-- Password Section -->
+    <section class="settings-section">
+      <h2>Password</h2>
+      @if (passwordError()) {
+        <div class="error-message">{{ passwordError() }}</div>
+      }
+      @if (passwordSuccess()) {
+        <div class="success-message">{{ passwordSuccess() }}</div>
+      }
+      <form [formGroup]="passwordForm" (ngSubmit)="submitPassword()">
+        <div class="form-group">
+          <label for="currentPassword">Current Password</label>
+          <input
+            id="currentPassword"
+            type="password"
+            formControlName="currentPassword"
+            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+          />
+        </div>
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input
+            id="newPassword"
+            type="password"
+            formControlName="newPassword"
+            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+          />
+          @if (
+            passwordForm.get('newPassword')?.hasError('minlength') &&
+            passwordForm.get('newPassword')?.touched
+          ) {
+            <span class="field-error">Password must be at least 6 characters</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm New Password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+          />
+        </div>
+        <button
+          type="submit"
+          class="button button-primary submit-button"
+          [disabled]="passwordForm.invalid || passwordLoading()"
+        >
+          @if (passwordLoading()) {
+            Changing...
+          } @else {
+            Change Password
+          }
+        </button>
+      </form>
+    </section>
+  </div>
+</div>

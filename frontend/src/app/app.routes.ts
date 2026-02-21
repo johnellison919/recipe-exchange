@@ -11,6 +11,8 @@ import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { UserProfileComponent } from './features/profile/user-profile.component';
 import { SavedRecipesComponent } from './features/saved/saved-recipes.component';
+import { SettingsComponent } from './features/settings/settings.component';
+import { ConfirmEmailChangeComponent } from './features/auth/confirm-email-change/confirm-email-change.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +40,18 @@ export const routes: Routes = [
     path: 'saved',
     component: SavedRecipesComponent,
     title: 'Saved Recipes - Recipe Exchange',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    title: 'Settings - Recipe Exchange',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'confirm-email-change',
+    component: ConfirmEmailChangeComponent,
+    title: 'Confirm Email Change - Recipe Exchange',
     canActivate: [authGuard],
   },
   {

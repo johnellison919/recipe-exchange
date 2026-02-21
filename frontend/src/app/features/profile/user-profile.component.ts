@@ -11,6 +11,7 @@ import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner
 import { User } from '../../models/user.model';
 import { Recipe } from '../../models/recipe.model';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
+import { getAvatarUrl } from '../../shared/utils/avatar.util';
 
 @Component({
   selector: 'app-user-profile',
@@ -30,6 +31,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   protected readonly recipes = signal<Recipe[]>([]);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
+
+  protected readonly getAvatarUrl = getAvatarUrl;
 
   ngOnInit(): void {
     this.routeSub = this.route.paramMap

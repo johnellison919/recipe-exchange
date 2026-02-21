@@ -9,7 +9,7 @@
           <button class="user-button" (click)="toggleDropdown()">
             <img
               class="user-avatar"
-              [src]="authService.currentUser()?.avatarUrl"
+              [src]="avatarSrc()"
               [alt]="authService.currentUser()?.username"
             />
           </button>

@@ -82,6 +82,59 @@ public class AuthController(AuthService authService, EmailService emailService) 
     }
 
     [Authorize]
+    [HttpPost("change-email")]
+    public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var (token, error) = await authService.RequestEmailChange(userId, request.NewEmail);
+        if (error is not null)
+            return BadRequest(new { error });
+
+        var user = await authService.GetById(userId);
+        await emailService.SendEmailChangeConfirmation(request.NewEmail, user!.Username, token!);
+
+        return Ok(new { message = "A confirmation email has been sent to your new email address." });
+    }
+
+    [Authorize]
+    [HttpPost("confirm-email-change")]
+    public async Task<IActionResult> ConfirmEmailChange([FromBody] ConfirmEmailChangeRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var (success, error) = await authService.ConfirmEmailChange(userId, request.Token);
+        if (!success)
+            return BadRequest(new { error });
+
+        var user = await authService.GetById(userId);
+        return Ok(new { message = "Email changed successfully.", user = AuthService.MapUser(user!) });
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var (success, error) = await authService.ChangePassword(userId, request.CurrentPassword, request.NewPassword);
+        if (!success)
+            return BadRequest(new { error });
+
+        return Ok(new { message = "Password changed successfully." });
+    }
+
+    [Authorize]
+    [HttpPut("avatar")]
+    public async Task<IActionResult> UpdateAvatar([FromBody] UpdateAvatarRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var (success, error) = await authService.UpdateAvatar(userId, request.AvatarUrl);
+        if (!success)
+            return BadRequest(new { error });
+
+        var user = await authService.GetById(userId);
+        return Ok(AuthService.MapUser(user!));
+    }
+
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

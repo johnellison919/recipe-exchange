@@ -116,6 +116,44 @@ export class AuthService {
     });
   }
 
+  changeEmail(newEmail: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/auth/change-email', { newEmail });
+  }
+
+  confirmEmailChange(token: string): Observable<{ message: string; user: User }> {
+    return this.http
+      .post<{ message: string; user: User }>('/api/auth/confirm-email-change', { token })
+      .pipe(
+        map((response) => {
+          response.user.createdAt = new Date(response.user.createdAt);
+          this.updateCurrentUser(response.user);
+          return response;
+        }),
+      );
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/auth/change-password', {
+      currentPassword,
+      newPassword,
+    });
+  }
+
+  updateAvatar(avatarUrl: string | null): Observable<User> {
+    return this.http.put<User>('/api/auth/avatar', { avatarUrl }).pipe(
+      map((user) => {
+        user.createdAt = new Date(user.createdAt);
+        this.updateCurrentUser(user);
+        return user;
+      }),
+    );
+  }
+
+  updateCurrentUser(user: User): void {
+    this.currentUserSignal.set(user);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+
   clearError(): void {
     this.authErrorSignal.set(null);
   }

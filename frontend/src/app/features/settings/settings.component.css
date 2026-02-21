@@ -1,0 +1,97 @@
+.settings {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.settings-container {
+  max-width: 600px;
+  width: 100%;
+}
+
+.settings-container h1 {
+  margin-bottom: 1.5rem;
+}
+
+.settings-section {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.settings-section h2 {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.current-value {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+  margin-bottom: 1rem;
+}
+
+.avatar-section {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.avatar-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-gray-200);
+  flex-shrink: 0;
+}
+
+.avatar-controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.avatar-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.avatar-buttons .button {
+  font-size: 0.813rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.file-upload-label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.submit-button {
+  width: 100%;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 480px) {
+  .avatar-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .avatar-controls {
+    width: 100%;
+  }
+}

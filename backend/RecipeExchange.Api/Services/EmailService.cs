@@ -41,6 +41,27 @@ public class EmailService
         await _resend.EmailSendAsync(message);
     }
 
+    public async Task SendEmailChangeConfirmation(string toEmail, string username, string token)
+    {
+        var confirmUrl = $"{_frontendBaseUrl}/confirm-email-change?token={Uri.EscapeDataString(token)}";
+
+        var message = new EmailMessage
+        {
+            From = $"{_fromName} <{_fromEmail}>",
+            To = [toEmail],
+            Subject = "Confirm your new email address",
+            HtmlBody = $"""
+                <h2>Email Change Request</h2>
+                <p>Hi {System.Net.WebUtility.HtmlEncode(username)}, you requested to change your email address to this one.</p>
+                <p><a href="{confirmUrl}">Confirm New Email</a></p>
+                <p>This link expires in 24 hours.</p>
+                <p>If you did not request this change, you can ignore this email.</p>
+                """
+        };
+
+        await _resend.EmailSendAsync(message);
+    }
+
     public async Task SendPasswordResetEmail(string toEmail, string username, string token)
     {
         var resetUrl = $"{_frontendBaseUrl}/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(toEmail)}";

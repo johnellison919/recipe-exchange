@@ -39,7 +39,7 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         {
             Username = request.Username,
             Email = request.Email,
-            AvatarUrl = $"https://i.pravatar.cc/150?u={request.Email}",
+            AvatarUrl = null,
             EmailConfirmed = false,
             EmailConfirmationToken = token,
             EmailConfirmationTokenExpiry = DateTime.UtcNow.AddHours(24)
@@ -142,6 +142,79 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
 
     public static UserResponse MapUser(User user) =>
         new(user.Id, user.Username, user.Email, user.AvatarUrl, user.Bio, user.CreatedAt);
+
+    public async Task<(string? token, string? error)> RequestEmailChange(string userId, string newEmail)
+    {
+        var user = await db.Users.FindAsync(userId);
+        if (user is null)
+            return (null, "User not found.");
+
+        if (user.Email == newEmail)
+            return (null, "New email is the same as your current email.");
+
+        if (await db.Users.AnyAsync(u => u.Email == newEmail))
+            return (null, "Email already in use.");
+
+        var token = GenerateSecureToken();
+        user.PendingEmail = newEmail;
+        user.EmailChangeToken = token;
+        user.EmailChangeTokenExpiry = DateTime.UtcNow.AddHours(24);
+        await db.SaveChangesAsync();
+
+        return (token, null);
+    }
+
+    public async Task<(bool success, string? error)> ConfirmEmailChange(string userId, string token)
+    {
+        var user = await db.Users.FindAsync(userId);
+        if (user is null)
+            return (false, "User not found.");
+
+        if (user.EmailChangeToken != token)
+            return (false, "Invalid confirmation link.");
+
+        if (user.EmailChangeTokenExpiry < DateTime.UtcNow)
+            return (false, "Confirmation link has expired. Please request a new one.");
+
+        if (await db.Users.AnyAsync(u => u.Email == user.PendingEmail))
+            return (false, "Email already in use.");
+
+        user.Email = user.PendingEmail!;
+        user.PendingEmail = null;
+        user.EmailChangeToken = null;
+        user.EmailChangeTokenExpiry = null;
+        await db.SaveChangesAsync();
+
+        return (true, null);
+    }
+
+    public async Task<(bool success, string? error)> ChangePassword(string userId, string currentPassword, string newPassword)
+    {
+        var user = await db.Users.FindAsync(userId);
+        if (user is null)
+            return (false, "User not found.");
+
+        var result = hasher.VerifyHashedPassword(user, user.PasswordHash, currentPassword);
+        if (result == PasswordVerificationResult.Failed)
+            return (false, "Current password is incorrect.");
+
+        user.PasswordHash = hasher.HashPassword(user, newPassword);
+        await db.SaveChangesAsync();
+
+        return (true, null);
+    }
+
+    public async Task<(bool success, string? error)> UpdateAvatar(string userId, string? avatarUrl)
+    {
+        var user = await db.Users.FindAsync(userId);
+        if (user is null)
+            return (false, "User not found.");
+
+        user.AvatarUrl = avatarUrl;
+        await db.SaveChangesAsync();
+
+        return (true, null);
+    }
 
     private static string GenerateSecureToken()
     {
