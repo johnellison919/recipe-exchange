@@ -11,7 +11,7 @@ namespace RecipeExchange.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(AuthService authService) : ControllerBase
+public class AuthController(AuthService authService, EmailService emailService) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -30,15 +30,55 @@ public class AuthController(AuthService authService) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var (user, error) = await authService.Register(request);
+        var (token, error) = await authService.Register(request);
         if (error is not null)
             return BadRequest(new { error });
 
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            BuildPrincipal(user!));
+        await emailService.SendConfirmationEmail(request.Email, request.Username, token!);
 
-        return Ok(AuthService.MapUser(user!));
+        return Ok(new { message = "Registration successful! Please check your email to confirm your account." });
+    }
+
+    [HttpPost("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request)
+    {
+        var (success, error) = await authService.ConfirmEmail(request.Email, request.Token);
+        if (!success)
+            return BadRequest(new { error });
+
+        return Ok(new { message = "Email confirmed successfully. You can now log in." });
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        var (user, token) = await authService.RequestPasswordReset(request.Email);
+
+        if (user is not null && token is not null)
+            await emailService.SendPasswordResetEmail(request.Email, user.Username, token);
+
+        return Ok(new { message = "If an account with that email exists, a password reset link has been sent." });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var (success, error) = await authService.ResetPassword(request.Email, request.Token, request.NewPassword);
+        if (!success)
+            return BadRequest(new { error });
+
+        return Ok(new { message = "Password has been reset successfully. You can now log in." });
+    }
+
+    [HttpPost("resend-confirmation")]
+    public async Task<IActionResult> ResendConfirmation([FromBody] ResendConfirmationRequest request)
+    {
+        var (user, token) = await authService.ResendConfirmation(request.Email);
+
+        if (user is not null && token is not null)
+            await emailService.SendConfirmationEmail(request.Email, user.Username, token);
+
+        return Ok(new { message = "If your email is registered and unconfirmed, a new confirmation email has been sent." });
     }
 
     [Authorize]

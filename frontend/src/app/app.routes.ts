@@ -6,6 +6,9 @@ import { RecipeFeedComponent } from './features/recipes/recipe-feed/recipe-feed.
 import { RecipeCreateComponent } from './features/recipes/recipe-create/recipe-create.component';
 import { RecipeDetailComponent } from './features/recipes/recipe-detail/recipe-detail.component';
 import { LoginComponent } from './features/auth/login/login.component';
+import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
+import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { UserProfileComponent } from './features/profile/user-profile.component';
 import { SavedRecipesComponent } from './features/saved/saved-recipes.component';
 
@@ -51,6 +54,23 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login - Recipe Exchange',
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'confirm-email',
+    component: ConfirmEmailComponent,
+    title: 'Confirm Email - Recipe Exchange',
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    title: 'Forgot Password - Recipe Exchange',
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    title: 'Reset Password - Recipe Exchange',
     canActivate: [guestGuard],
   },
 ];

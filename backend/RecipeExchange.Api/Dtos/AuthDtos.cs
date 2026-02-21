@@ -24,3 +24,11 @@ public record UserProfileResponse(
     DateTime CreatedAt,
     int RecipeCount,
     int TotalVoteScore);
+
+public record ConfirmEmailRequest(string Email, string Token);
+
+public record ForgotPasswordRequest(string Email);
+
+public record ResetPasswordRequest(string Email, string Token, string NewPassword);
+
+public record ResendConfirmationRequest(string Email);

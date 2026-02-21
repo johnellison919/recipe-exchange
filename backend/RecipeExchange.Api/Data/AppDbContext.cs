@@ -23,6 +23,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.HasIndex(u => u.Username).IsUnique();
             b.Property(u => u.Email).HasMaxLength(256);
             b.Property(u => u.Username).HasMaxLength(50);
+            b.Property(u => u.EmailConfirmationToken).HasMaxLength(128);
+            b.Property(u => u.PasswordResetToken).HasMaxLength(128);
         });
 
         modelBuilder.Entity<Recipe>(b =>

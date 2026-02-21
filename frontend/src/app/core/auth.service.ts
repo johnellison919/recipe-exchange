@@ -72,17 +72,14 @@ export class AuthService {
     );
   }
 
-  register(registration: UserRegistration): Observable<User> {
+  register(registration: UserRegistration): Observable<{ message: string }> {
     this.authLoadingSignal.set(true);
     this.authErrorSignal.set(null);
 
-    return this.http.post<User>('/api/auth/register', registration).pipe(
-      map((user) => {
-        user.createdAt = new Date(user.createdAt);
-        this.currentUserSignal.set(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
+    return this.http.post<{ message: string }>('/api/auth/register', registration).pipe(
+      map((response) => {
         this.authLoadingSignal.set(false);
-        return user;
+        return response;
       }),
       catchError((err) => {
         const message = err.error?.error ?? 'Registration failed';
@@ -91,6 +88,22 @@ export class AuthService {
         return throwError(() => err);
       }),
     );
+  }
+
+  confirmEmail(email: string, token: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/auth/confirm-email', { email, token });
+  }
+
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/auth/forgot-password', { email });
+  }
+
+  resetPassword(email: string, token: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/auth/reset-password', { email, token, newPassword });
+  }
+
+  resendConfirmation(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>('/api/auth/resend-confirmation', { email });
   }
 
   logout(): void {

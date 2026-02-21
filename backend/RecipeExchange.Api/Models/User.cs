@@ -9,4 +9,9 @@ public class User
     public string? Bio { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string PasswordHash { get; set; } = string.Empty;
+    public bool EmailConfirmed { get; set; } = false;
+    public string? EmailConfirmationToken { get; set; }
+    public DateTime? EmailConfirmationTokenExpiry { get; set; }
+    public string? PasswordResetToken { get; set; }
+    public DateTime? PasswordResetTokenExpiry { get; set; }
 }
