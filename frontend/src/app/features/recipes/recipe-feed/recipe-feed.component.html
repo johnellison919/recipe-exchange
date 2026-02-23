@@ -53,6 +53,11 @@
         </select>
       </div>
     </div>
+    @if (recipeService.searchQuery(); as query) {
+      <p class="search-summary">
+        Showing {{ totalRecipes() }} {{ totalRecipes() === 1 ? 'result' : 'results' }} for "{{ query }}"
+      </p>
+    }
     @if (loading) {
       <app-loading-spinner />
     } @else {

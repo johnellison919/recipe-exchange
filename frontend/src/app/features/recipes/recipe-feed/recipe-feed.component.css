@@ -41,6 +41,12 @@
   }
 }
 
+.search-summary {
+  color: var(--color-gray-600);
+  font-size: 0.95rem;
+  padding-top: 1rem;
+}
+
 .empty-state {
   padding: 10rem 0;
 }
