@@ -147,6 +147,20 @@
       margin-bottom: 1rem;
     }
 
+    .ingredient-group {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .ingredient-group-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
     .ingredients-list {
       list-style: none;
       padding: 0;
@@ -157,18 +171,6 @@
 
       .ingredient-item {
         font-size: 0.875rem;
-        display: flex;
-        gap: 0.3rem;
-        flex-wrap: wrap;
-        align-items: baseline;
-
-        .ingredient-amount {
-          font-weight: 700;
-        }
-
-        .ingredient-unit {
-          color: var(--color-text-muted);
-        }
       }
     }
 

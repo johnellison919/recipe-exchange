@@ -36,10 +36,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.Property(r => r.Difficulty).HasMaxLength(10);
             b.Property(r => r.Category).HasMaxLength(20);
 
-            var ingredientComparer = new ValueComparer<List<Ingredient>>(
+            var ingredientGroupComparer = new ValueComparer<List<IngredientGroup>>(
                 (a, b) => JsonSerializer.Serialize(a, jsonOptions) == JsonSerializer.Serialize(b, jsonOptions),
                 v => JsonSerializer.Serialize(v, jsonOptions).GetHashCode(),
-                v => JsonSerializer.Deserialize<List<Ingredient>>(JsonSerializer.Serialize(v, jsonOptions), jsonOptions)!);
+                v => JsonSerializer.Deserialize<List<IngredientGroup>>(JsonSerializer.Serialize(v, jsonOptions), jsonOptions)!);
 
             var stringListComparer = new ValueComparer<List<string>>(
                 (a, b) => JsonSerializer.Serialize(a, jsonOptions) == JsonSerializer.Serialize(b, jsonOptions),
@@ -49,9 +49,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             b.Property(r => r.Ingredients)
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, jsonOptions),
-                    v => JsonSerializer.Deserialize<List<Ingredient>>(v, jsonOptions) ?? new())
+                    v => JsonSerializer.Deserialize<List<IngredientGroup>>(v, jsonOptions) ?? new())
                 .HasColumnType("json")
-                .Metadata.SetValueComparer(ingredientComparer);
+                .Metadata.SetValueComparer(ingredientGroupComparer);
 
             b.Property(r => r.Instructions)
                 .HasConversion(

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RecipeService } from '../../../core/recipe.service';
-import { RecipeCreate, RecipeUpdate } from '../../../models/recipe.model';
+import { IngredientGroup, RecipeCreate, RecipeUpdate } from '../../../models/recipe.model';
 import { slugify } from '../../../shared/utils/slugify';
 
 @Component({
@@ -46,7 +46,7 @@ export class RecipeCreateComponent implements OnInit {
     difficulty: ['easy', [Validators.required]],
     category: ['', [Validators.required]],
     imageUrl: [''],
-    ingredients: this.formBuilder.array([this.createIngredientGroup()]),
+    ingredientGroups: this.formBuilder.array([this.createIngredientGroup('Ingredients')]),
     instructions: this.formBuilder.array([this.formBuilder.control('', Validators.required)]),
   });
 
@@ -78,14 +78,13 @@ export class RecipeCreateComponent implements OnInit {
             this.imagePreviewUrl.set(recipe.imageUrl);
           }
 
-          // Rebuild ingredients FormArray
-          this.ingredients.clear();
-          for (const ing of recipe.ingredients) {
-            this.ingredients.push(this.formBuilder.group({
-              name: [ing.name, Validators.required],
-              amount: [ing.amount, Validators.required],
-              unit: [ing.unit],
-            }));
+          // Rebuild ingredient groups FormArray
+          this.ingredientGroups.clear();
+          for (const group of recipe.ingredients) {
+            this.ingredientGroups.push(this.createIngredientGroup(
+              group.name,
+              group.items,
+            ));
           }
 
           // Rebuild instructions FormArray
@@ -99,29 +98,46 @@ export class RecipeCreateComponent implements OnInit {
     }
   }
 
-  get ingredients(): FormArray {
-    return this.recipeForm.get('ingredients') as FormArray;
+  get ingredientGroups(): FormArray {
+    return this.recipeForm.get('ingredientGroups') as FormArray;
   }
 
   get instructions(): FormArray {
     return this.recipeForm.get('instructions') as FormArray;
   }
 
-  private createIngredientGroup(): FormGroup {
+  getGroupItems(groupIndex: number): FormArray {
+    return this.ingredientGroups.at(groupIndex).get('items') as FormArray;
+  }
+
+  private createIngredientGroup(name: string, items?: string[]): FormGroup {
+    const itemControls = items?.length
+      ? items.map(item => this.formBuilder.control(item, Validators.required))
+      : [this.formBuilder.control('', Validators.required)];
     return this.formBuilder.group({
-      name: ['', Validators.required],
-      amount: ['', Validators.required],
-      unit: [''],
+      name: [name, Validators.required],
+      items: this.formBuilder.array(itemControls),
     });
   }
 
-  addIngredient(): void {
-    this.ingredients.push(this.createIngredientGroup());
+  addGroup(): void {
+    this.ingredientGroups.push(this.createIngredientGroup(''));
   }
 
-  removeIngredient(index: number): void {
-    if (this.ingredients.length > 1) {
-      this.ingredients.removeAt(index);
+  removeGroup(groupIndex: number): void {
+    if (this.ingredientGroups.length > 1) {
+      this.ingredientGroups.removeAt(groupIndex);
+    }
+  }
+
+  addIngredientToGroup(groupIndex: number): void {
+    this.getGroupItems(groupIndex).push(this.formBuilder.control('', Validators.required));
+  }
+
+  removeIngredientFromGroup(groupIndex: number, itemIndex: number): void {
+    const items = this.getGroupItems(groupIndex);
+    if (items.length > 1) {
+      items.removeAt(itemIndex);
     }
   }
 
@@ -182,9 +198,10 @@ export class RecipeCreateComponent implements OnInit {
       difficulty: value.difficulty as RecipeCreate['difficulty'],
       category: value.category as RecipeCreate['category'],
       imageUrl: value.imageUrl || undefined,
-      ingredients: (value.ingredients as { name: string; amount: string; unit: string }[]).map(
-        (ing) => ({ name: ing.name, amount: ing.amount, unit: ing.unit }),
-      ),
+      ingredients: (value.ingredientGroups as { name: string; items: string[] }[]).map((g) => ({
+        name: g.name,
+        items: g.items.filter((s) => s.trim() !== ''),
+      })),
       instructions: (value.instructions as string[]).filter((s) => s.trim() !== ''),
       tags: [],
     };

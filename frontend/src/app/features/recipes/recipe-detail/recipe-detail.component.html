@@ -77,17 +77,18 @@
     <div class="recipe-body">
       <section class="ingredients-section">
         <h2>Ingredients</h2>
-        <ul class="ingredients-list">
-          @for (ingredient of recipe()!.ingredients; track $index) {
-            <li class="ingredient-item">
-              <span class="ingredient-amount">{{ ingredient.amount }}</span>
-              @if (ingredient.unit) {
-                <span class="ingredient-unit">{{ ingredient.unit }}</span>
+        @for (group of recipe()!.ingredients; track $index) {
+          <div class="ingredient-group">
+            @if (recipe()!.ingredients.length > 1) {
+              <h3 class="ingredient-group-name">{{ group.name }}</h3>
+            }
+            <ul class="ingredients-list">
+              @for (item of group.items; track $index) {
+                <li class="ingredient-item">{{ item }}</li>
               }
-              <span class="ingredient-name">{{ ingredient.name }}</span>
-            </li>
-          }
-        </ul>
+            </ul>
+          </div>
+        }
       </section>
 
       <section class="instructions-section">

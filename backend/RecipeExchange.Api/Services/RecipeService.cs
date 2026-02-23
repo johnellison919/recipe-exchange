@@ -66,9 +66,9 @@ public class RecipeService(AppDbContext db)
         {
             Title = request.Title,
             Description = request.Description,
-            Ingredients = request.Ingredients.Select(i => new Ingredient
+            Ingredients = request.Ingredients.Select(g => new IngredientGroup
             {
-                Name = i.Name, Amount = i.Amount, Unit = i.Unit
+                Name = g.Name, Items = g.Items
             }).ToList(),
             Instructions = request.Instructions,
             PrepTime = request.PrepTime,
@@ -103,7 +103,7 @@ public class RecipeService(AppDbContext db)
         if (request.Description is not null) recipe.Description = request.Description;
         if (request.Ingredients is not null)
             recipe.Ingredients = request.Ingredients
-                .Select(i => new Ingredient { Name = i.Name, Amount = i.Amount, Unit = i.Unit })
+                .Select(g => new IngredientGroup { Name = g.Name, Items = g.Items })
                 .ToList();
         if (request.Instructions is not null) recipe.Instructions = request.Instructions;
         if (request.PrepTime is not null) recipe.PrepTime = request.PrepTime.Value;
@@ -175,7 +175,7 @@ public class RecipeService(AppDbContext db)
     public static RecipeResponse MapRecipe(Recipe recipe, User author, string? userVote, bool isSaved = false) =>
         new(
             recipe.Id, recipe.Title, recipe.Description,
-            recipe.Ingredients.Select(i => new IngredientDto(i.Name, i.Amount, i.Unit)).ToList(),
+            recipe.Ingredients.Select(g => new IngredientGroupDto(g.Name, g.Items)).ToList(),
             recipe.Instructions, recipe.PrepTime, recipe.CookTime, recipe.Servings,
             recipe.Difficulty, recipe.Category, recipe.Tags, recipe.ImageUrl,
             recipe.AuthorId, AuthService.MapUser(author),

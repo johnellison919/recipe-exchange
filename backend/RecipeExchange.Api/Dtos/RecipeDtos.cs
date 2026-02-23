@@ -1,12 +1,12 @@
 namespace RecipeExchange.Api.Dtos;
 
-public record IngredientDto(string Name, string Amount, string Unit);
+public record IngredientGroupDto(string Name, List<string> Items);
 
 public record RecipeResponse(
     string Id,
     string Title,
     string Description,
-    List<IngredientDto> Ingredients,
+    List<IngredientGroupDto> Ingredients,
     List<string> Instructions,
     int PrepTime,
     int CookTime,
@@ -26,7 +26,7 @@ public record RecipeResponse(
 public record CreateRecipeRequest(
     string Title,
     string Description,
-    List<IngredientDto> Ingredients,
+    List<IngredientGroupDto> Ingredients,
     List<string> Instructions,
     int PrepTime,
     int CookTime,
@@ -39,7 +39,7 @@ public record CreateRecipeRequest(
 public record UpdateRecipeRequest(
     string? Title,
     string? Description,
-    List<IngredientDto>? Ingredients,
+    List<IngredientGroupDto>? Ingredients,
     List<string>? Instructions,
     int? PrepTime,
     int? CookTime,

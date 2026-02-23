@@ -1,12 +1,6 @@
 import { User } from './user.model';
 import { VoteType } from './vote.model';
 
-export interface Ingredient {
-  name: string;
-  amount: string;
-  unit: string;
-}
-
 export type RecipeCategory =
   | 'breakfast'
   | 'lunch'
@@ -18,11 +12,16 @@ export type RecipeCategory =
 
 export type RecipeDifficulty = 'easy' | 'medium' | 'hard';
 
+export interface IngredientGroup {
+  name: string;
+  items: string[];
+}
+
 export interface Recipe {
   id: string;
   title: string;
   description: string;
-  ingredients: Ingredient[];
+  ingredients: IngredientGroup[];
   instructions: string[];
   prepTime: number; // in minutes
   cookTime: number; // in minutes
@@ -43,7 +42,7 @@ export interface Recipe {
 export interface RecipeCreate {
   title: string;
   description: string;
-  ingredients: Ingredient[];
+  ingredients: IngredientGroup[];
   instructions: string[];
   prepTime: number;
   cookTime: number;

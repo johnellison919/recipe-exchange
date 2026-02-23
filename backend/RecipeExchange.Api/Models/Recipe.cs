@@ -2,11 +2,10 @@ using System.Security.Cryptography;
 
 namespace RecipeExchange.Api.Models;
 
-public class Ingredient
+public class IngredientGroup
 {
     public string Name { get; set; } = string.Empty;
-    public string Amount { get; set; } = string.Empty;
-    public string Unit { get; set; } = string.Empty;
+    public List<string> Items { get; set; } = [];
 }
 
 public class Recipe
@@ -20,7 +19,7 @@ public class Recipe
     public string Id { get; set; } = GenerateId();
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public List<Ingredient> Ingredients { get; set; } = [];
+    public List<IngredientGroup> Ingredients { get; set; } = [];
     public List<string> Instructions { get; set; } = [];
     public int PrepTime { get; set; }
     public int CookTime { get; set; }

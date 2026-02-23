@@ -133,34 +133,56 @@
     <!-- Ingredients -->
     <div class="form-section">
       <h2>Ingredients</h2>
-      <div formArrayName="ingredients">
-        @for (control of ingredients.controls; track control) {
-          <div class="ingredient-row" [formGroupName]="$index">
-            <input
-              type="text"
-              formControlName="name"
-              placeholder="Ingredient"
-              [class.error]="control.get('name')?.invalid && control.get('name')?.touched"
-            />
-            <input
-              type="text"
-              formControlName="amount"
-              placeholder="Amount"
-              [class.error]="control.get('amount')?.invalid && control.get('amount')?.touched"
-            />
-            <input type="text" formControlName="unit" placeholder="Unit (optional)" />
-            <button
-              type="button"
-              class="remove-button"
-              (click)="removeIngredient($index)"
-              [disabled]="ingredients.length === 1"
-            >
-              &times;
+      <div formArrayName="ingredientGroups">
+        @for (group of ingredientGroups.controls; track group; let gi = $index) {
+          <div class="ingredient-group" [formGroupName]="gi">
+            <div class="ingredient-group-header">
+              <label class="group-name-label">
+                Section Name
+                <input
+                  type="text"
+                  formControlName="name"
+                  class="group-name-input"
+                  [class.error]="group.get('name')?.invalid && group.get('name')?.touched"
+                />
+              </label>
+              <button
+                type="button"
+                class="remove-button"
+                (click)="removeGroup(gi)"
+                [disabled]="ingredientGroups.length === 1"
+                title="Remove section"
+              >
+                &times;
+              </button>
+            </div>
+            <div formArrayName="items">
+              @for (item of getGroupItems(gi).controls; track item; let ii = $index) {
+                <div class="ingredient-row">
+                  <textarea
+                    [formControlName]="ii"
+                    rows="1"
+                    placeholder="List ingredient..."
+                    [class.error]="item.invalid && item.touched"
+                  ></textarea>
+                  <button
+                    type="button"
+                    class="remove-button"
+                    (click)="removeIngredientFromGroup(gi, ii)"
+                    [disabled]="getGroupItems(gi).length === 1"
+                  >
+                    &times;
+                  </button>
+                </div>
+              }
+            </div>
+            <button type="button" class="add-button" (click)="addIngredientToGroup(gi)">
+              + Add Ingredient
             </button>
           </div>
         }
       </div>
-      <button type="button" class="add-button" (click)="addIngredient()">+ Add Ingredient</button>
+      <button type="button" class="add-button" (click)="addGroup()">+ Add Section</button>
     </div>
 
     <!-- Instructions -->
