@@ -6,6 +6,7 @@ import { Recipe } from '../../../models/recipe.model';
 import { VoteButtonsComponent, VoteChangeEvent } from '../../../shared/components/vote-buttons/vote-buttons.component';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 import { slugify } from '../../../shared/utils/slugify';
+import { getAvatarUrl } from '../../../shared/utils/avatar.util';
 import { AuthService } from '../../../core/auth.service';
 import { VoteType } from '../../../models/vote.model';
 
@@ -25,6 +26,7 @@ export class RecipeCardComponent {
 
   recipe = input.required<Recipe>();
   protected readonly slugify = slugify;
+  protected readonly getAvatarUrl = getAvatarUrl;
 
   // Local mutable state that tracks vote/save changes
   private readonly localVoteScore = signal<number | undefined>(undefined);

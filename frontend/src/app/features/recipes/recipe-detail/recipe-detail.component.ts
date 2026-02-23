@@ -11,6 +11,7 @@ import { VoteButtonsComponent, VoteChangeEvent } from '../../../shared/component
 import { VoteType } from '../../../models/vote.model';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { getAvatarUrl } from '../../../shared/utils/avatar.util';
 
 interface SaveRecipeResponse {
   isSaved: boolean;
@@ -43,6 +44,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     () => this.recipe()?.authorId === this.authService.currentUser()?.id,
   );
   protected readonly isAuthenticated = this.authService.isAuthenticated;
+  protected readonly getAvatarUrl = getAvatarUrl;
 
   // Local mutable state for vote/save
   private readonly localVoteScore = signal<number | undefined>(undefined);

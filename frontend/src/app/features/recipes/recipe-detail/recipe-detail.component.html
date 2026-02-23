@@ -45,13 +45,11 @@
 
       <div class="recipe-author-and-actions">
         <div class="recipe-author">
-          @if (recipe()!.author.avatarUrl) {
-            <img
-              [src]="recipe()!.author.avatarUrl"
-              [alt]="recipe()!.author.username"
-              class="author-avatar"
-            />
-          }
+          <img
+            [src]="getAvatarUrl(recipe()!.author.avatarUrl, recipe()!.author.username)"
+            [alt]="recipe()!.author.username"
+            class="author-avatar"
+          />
           <div class="author-details">
             <span class="author-name">{{ recipe()!.author.username }}</span>
             <span class="posted-time">{{ recipe()!.createdAt | relativeTime }}</span>

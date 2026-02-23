@@ -42,13 +42,11 @@
 
       <div class="recipe-footer">
         <div class="author-info">
-          @if (recipe().author.avatarUrl) {
-            <img
-              [src]="recipe().author.avatarUrl"
-              [alt]="recipe().author.username"
-              class="author-avatar"
-            />
-          }
+          <img
+            [src]="getAvatarUrl(recipe().author.avatarUrl, recipe().author.username)"
+            [alt]="recipe().author.username"
+            class="author-avatar"
+          />
           <div class="author-details">
             <span class="author-name">{{ recipe().author.username }}</span>
             <span class="recipe-time">{{ recipe().createdAt | relativeTime }}</span>
