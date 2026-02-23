@@ -1,8 +1,18 @@
 import { Component, inject, input, output } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../core/auth.service';
 import { CommonModule } from '@angular/common';
 import { VoteType } from '../../../models/vote.model';
-import { VoteService } from '../../../core/vote.service';
+
+export interface VoteChangeEvent {
+  voteScore: number;
+  userVote: VoteType;
+}
+
+interface VoteResponse {
+  voteType: VoteType;
+  voteScore: number;
+}
 
 @Component({
   selector: 'app-vote-buttons',
@@ -12,7 +22,7 @@ import { VoteService } from '../../../core/vote.service';
 })
 export class VoteButtonsComponent {
   private readonly authService = inject(AuthService);
-  private readonly voteService = inject(VoteService);
+  private readonly http = inject(HttpClient);
 
   // Inputs
   recipeId = input.required<string>();
@@ -20,7 +30,7 @@ export class VoteButtonsComponent {
   userVote = input<VoteType>(null);
 
   // Output
-  voteChange = output<void>();
+  voteChange = output<VoteChangeEvent>();
 
   // Computed
   get isAuthenticated(): boolean {
@@ -36,24 +46,58 @@ export class VoteButtonsComponent {
   }
 
   onUpvote(): void {
-    if (!this.isAuthenticated) {
-      return;
+    if (!this.isAuthenticated) return;
+
+    const oldVote = this.userVote();
+    const newVoteType: VoteType = this.isUpvoted ? null : 'upvote';
+
+    // Optimistic: calculate expected score change
+    let scoreChange = 0;
+    if (!newVoteType) {
+      scoreChange = oldVote === 'upvote' ? -1 : oldVote === 'downvote' ? 1 : 0;
+    } else if (!oldVote) {
+      scoreChange = 1;
+    } else if (oldVote !== newVoteType) {
+      scoreChange = 2;
     }
 
-    const newVoteType: VoteType = this.isUpvoted ? null : 'upvote';
-    this.voteService.vote(this.recipeId(), newVoteType).subscribe(() => {
-      this.voteChange.emit();
+    this.voteChange.emit({ voteScore: this.voteScore() + scoreChange, userVote: newVoteType });
+
+    this.http.post<VoteResponse>(`/api/recipes/${this.recipeId()}/vote`, { voteType: newVoteType }).subscribe({
+      next: (result) => {
+        this.voteChange.emit({ voteScore: result.voteScore, userVote: result.voteType });
+      },
+      error: () => {
+        // Rollback
+        this.voteChange.emit({ voteScore: this.voteScore(), userVote: oldVote });
+      },
     });
   }
 
   onDownvote(): void {
-    if (!this.isAuthenticated) {
-      return;
+    if (!this.isAuthenticated) return;
+
+    const oldVote = this.userVote();
+    const newVoteType: VoteType = this.isDownvoted ? null : 'downvote';
+
+    let scoreChange = 0;
+    if (!newVoteType) {
+      scoreChange = oldVote === 'upvote' ? -1 : oldVote === 'downvote' ? 1 : 0;
+    } else if (!oldVote) {
+      scoreChange = -1;
+    } else if (oldVote !== newVoteType) {
+      scoreChange = -2;
     }
 
-    const newVoteType: VoteType = this.isDownvoted ? null : 'downvote';
-    this.voteService.vote(this.recipeId(), newVoteType).subscribe(() => {
-      this.voteChange.emit();
+    this.voteChange.emit({ voteScore: this.voteScore() + scoreChange, userVote: newVoteType });
+
+    this.http.post<VoteResponse>(`/api/recipes/${this.recipeId()}/vote`, { voteType: newVoteType }).subscribe({
+      next: (result) => {
+        this.voteChange.emit({ voteScore: result.voteScore, userVote: result.voteType });
+      },
+      error: () => {
+        this.voteChange.emit({ voteScore: this.voteScore(), userVote: oldVote });
+      },
     });
   }
 }

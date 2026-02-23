@@ -1,15 +1,20 @@
-import { Component, computed, effect, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { RecipeService } from '../../../core/recipe.service';
 import { AuthService } from '../../../core/auth.service';
-import { SavedRecipeService } from '../../../core/saved-recipe.service';
 import { RecentlyViewedService } from '../../../core/recently-viewed.service';
-import { VoteButtonsComponent } from '../../../shared/components/vote-buttons/vote-buttons.component';
+import { VoteButtonsComponent, VoteChangeEvent } from '../../../shared/components/vote-buttons/vote-buttons.component';
+import { VoteType } from '../../../models/vote.model';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+
+interface SaveRecipeResponse {
+  isSaved: boolean;
+}
 
 @Component({
   selector: 'app-recipe-detail',
@@ -28,7 +33,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   private readonly recipeService = inject(RecipeService);
   private readonly authService = inject(AuthService);
   private readonly titleService = inject(Title);
-  private readonly savedRecipeService = inject(SavedRecipeService);
+  private readonly http = inject(HttpClient);
   private readonly recentlyViewed = inject(RecentlyViewedService);
 
   protected readonly recipe = this.recipeService.selectedRecipe;
@@ -39,6 +44,21 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   );
   protected readonly isAuthenticated = this.authService.isAuthenticated;
 
+  // Local mutable state for vote/save
+  private readonly localVoteScore = signal<number | undefined>(undefined);
+  private readonly localUserVote = signal<VoteType | undefined>(undefined);
+  private readonly localIsSaved = signal<boolean | undefined>(undefined);
+
+  protected readonly displayVoteScore = computed(() =>
+    this.localVoteScore() ?? this.recipe()?.voteScore ?? 0,
+  );
+  protected readonly displayUserVote = computed(() =>
+    this.localUserVote() !== undefined ? this.localUserVote()! : (this.recipe()?.userVote ?? null),
+  );
+  protected readonly displayIsSaved = computed(() =>
+    this.localIsSaved() ?? this.recipe()?.isSaved ?? false,
+  );
+
   private paramSub?: Subscription;
 
   constructor() {
@@ -47,6 +67,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       if (r) {
         this.titleService.setTitle(`${r.title} - Recipe Exchange`);
         this.recentlyViewed.add({ id: r.id, title: r.title });
+        // Reset local overrides when a new recipe loads
+        this.localVoteScore.set(undefined);
+        this.localUserVote.set(undefined);
+        this.localIsSaved.set(undefined);
       }
     });
   }
@@ -65,11 +89,25 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.recipeService.clearSelectedRecipe();
   }
 
-  onVoteChange(): void {}
+  onVoteChange(event: VoteChangeEvent): void {
+    this.localVoteScore.set(event.voteScore);
+    this.localUserVote.set(event.userVote);
+  }
 
   onToggleSave(): void {
     const r = this.recipe();
     if (!this.isAuthenticated() || !r) return;
-    this.savedRecipeService.toggleSave(r.id).subscribe();
+
+    const oldIsSaved = this.displayIsSaved();
+    this.localIsSaved.set(!oldIsSaved);
+
+    this.http.post<SaveRecipeResponse>(`/api/recipes/${r.id}/save`, {}).subscribe({
+      next: (result) => {
+        this.localIsSaved.set(result.isSaved);
+      },
+      error: () => {
+        this.localIsSaved.set(oldIsSaved);
+      },
+    });
   }
 }

@@ -39,9 +39,9 @@
         <div class="recipe-actions">
           <app-vote-buttons
             [recipeId]="recipe()!.id"
-            [voteScore]="recipe()!.voteScore"
-            [userVote]="recipe()!.userVote ?? null"
-            (voteChange)="onVoteChange()"
+            [voteScore]="displayVoteScore()"
+            [userVote]="displayUserVote()"
+            (voteChange)="onVoteChange($event)"
           />
           @if (isAuthor()) {
             <a [routerLink]="['/recipes', recipe()!.id, 'edit']" class="button button-outline"
