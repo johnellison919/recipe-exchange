@@ -2,27 +2,31 @@
   <div class="feed-container">
     <div class="feed-header">
       <h1>Recipe Feed</h1>
-      <p class="feed-subtitle">Discover and share delicious recipes from our community</p>
+      <p class="subtitle">Discover and share delicious recipes from our community</p>
     </div>
     <div class="category-container">
       <button
         type="button"
-        class="category-button"
+        class="category"
         [class.active]="currentCategory === null"
         (click)="setCategory(null)"
-      >All</button>
+      >
+        All
+      </button>
       @for (cat of categories(); track cat) {
         <button
           type="button"
-          class="category-button"
+          class="category"
           [class.active]="currentCategory === cat"
           (click)="setCategory($any(cat))"
-        >{{ cat | titlecase }}</button>
+        >
+          {{ cat | titlecase }}
+        </button>
       }
     </div>
-    <div class="filter-bar">
+    <div class="filter-container">
       <div class="filter-group">
-        <label for="sort-select" class="filter-label">Sort by:</label>
+        <label for="sort-select">Sort&nbsp;by:</label>
         <select
           id="sort-select"
           class="filter-dropdown"
@@ -34,7 +38,7 @@
         </select>
       </div>
       <div class="filter-group">
-        <label for="date-range-select" class="filter-label">Date:</label>
+        <label for="date-range-select">Date:</label>
         <select
           id="date-range-select"
           class="filter-dropdown"

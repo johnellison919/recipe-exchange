@@ -6,9 +6,9 @@
     [disabled]="!isAuthenticated"
     (click)="onUpvote()"
   >
-    Up
+    <i class="ci ci-Arrow_Circle_Up"></i>
   </button>
-  <span class="vote-score" [class.positive]="voteScore() > 0" [class.negative]="voteScore() < 0">
+  <span class="vote-score" [class.upvoted]="isUpvoted" [class.downvoted]="isDownvoted">
     {{ voteScore() }}
   </span>
   <button
@@ -18,6 +18,6 @@
     (click)="onDownvote()"
     [title]="isAuthenticated ? 'Downvote' : 'Login to vote'"
   >
-    Down
+    <i class="ci ci-Arrow_Circle_Down"></i>
   </button>
 </div>

@@ -1,13 +1,17 @@
-<div class="profile-page">
+<div class="profile-container">
   @if (loading()) {
     <app-loading-spinner />
   } @else if (error()) {
     <p class="error-message">{{ error() }}</p>
   } @else if (profile()) {
     <div class="profile-header">
-      <img [src]="getAvatarUrl(profile()!.avatarUrl, profile()!.username)" [alt]="profile()!.username" class="profile-avatar" />
+      <img
+        [src]="getAvatarUrl(profile()!.avatarUrl, profile()!.username)"
+        [alt]="profile()!.username"
+        class="profile-avatar"
+      />
       <div class="profile-info">
-        <h1 class="profile-username">{{ profile()!.username }}</h1>
+        <h1>{{ profile()!.username }}</h1>
         @if (profile()!.bio) {
           <p class="profile-bio">{{ profile()!.bio }}</p>
         }
@@ -16,7 +20,7 @@
     </div>
 
     <div class="profile-recipes">
-      <h2 class="section-heading">Recipes</h2>
+      <h2 class="profile-title">Recipes</h2>
       @if (recipes().length === 0) {
         <p class="empty-state">No recipes yet.</p>
       } @else {

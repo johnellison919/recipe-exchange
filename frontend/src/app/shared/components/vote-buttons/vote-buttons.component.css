@@ -1,0 +1,38 @@
+.vote-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  .vote-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .upvote {
+    &.active {
+      color: var(--color-secondary);
+    }
+  }
+
+  .downvote {
+    &.active {
+      color: var(--color-primary);
+    }
+  }
+
+  .vote-score {
+    font-weight: bold;
+
+    &.upvoted {
+      color: var(--color-secondary);
+    }
+
+    &.downvoted {
+      color: var(--color-primary);
+    }
+  }
+}

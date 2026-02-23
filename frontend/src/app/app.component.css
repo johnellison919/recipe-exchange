@@ -3,7 +3,7 @@
   gap: 1rem;
   max-width: var(--container-width);
   margin: auto;
-  padding: 2rem 0;
+  padding: 3rem 0;
 
   & .main-content {
     width: 100%;

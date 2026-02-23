@@ -12,7 +12,6 @@
           id="email"
           type="email"
           formControlName="email"
-          placeholder="you@example.com"
           [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         />
         @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
@@ -29,7 +28,6 @@
           id="password"
           type="password"
           formControlName="password"
-          placeholder="••••••••"
           [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
         />
         @if (
@@ -44,7 +42,11 @@
         }
       </div>
 
-      <button type="submit" class="button button-primary submit-button" [disabled]="loginForm.invalid || authLoading">
+      <button
+        type="submit"
+        class="button button-primary submit-button"
+        [disabled]="loginForm.invalid || authLoading"
+      >
         @if (authLoading) {
           Logging in...
         } @else {

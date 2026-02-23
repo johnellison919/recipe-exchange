@@ -1,36 +1,39 @@
 <aside class="sidebar">
   <div class="sidebar-container">
     <div class="sidebar-section">
-      <label for="search-input" class="search-label">Search Recipes</label>
       <div class="search-wrapper">
         <input
           id="search-input"
           type="text"
           class="search-input"
-          placeholder="Search recipes..."
+          placeholder="Search"
           [ngModel]="searchQuery()"
           (ngModelChange)="searchQuery.set($event)"
           (keydown.enter)="search()"
         />
-        @if (searchQuery()) {
-          <button type="button" class="search-clear" (click)="clearSearch()">&times;</button>
-        }
+        <button type="button" class="search-button" (click)="search()">
+          <i class="ci ci-Search_Magnifying_Glass"></i>
+        </button>
       </div>
-      <button type="button" class="button button-primary search-button" (click)="search()">Search</button>
     </div>
-    @if (!isOnNewRecipePage) {
-      <div class="sidebar-section">
+    <div class="sidebar-section">
+      @if (!isOnNewRecipePage) {
         <a
           [routerLink]="authService.isAuthenticated() ? '/recipes/new' : '/login'"
-          class="button button-primary"
-        >New Recipe</a>
-      </div>
-    }
-    @if (authService.isAuthenticated()) {
-      <div class="sidebar-section">
-        <a routerLink="/saved" class="sidebar-link">Saved Recipes</a>
-      </div>
-    }
+          class="button button-primary button-block"
+        >
+          <i class="ci-Add_Plus_Circle"></i>
+          New Recipe</a
+        >
+      }
+      @if (authService.isAuthenticated()) {
+        <a routerLink="/saved" class="button button-outline button-block">
+          <i class="ci-Star"></i>
+          Saved Recipes
+        </a>
+      }
+    </div>
+
     @if (profileContext.user(); as profileUser) {
       <div class="sidebar-section">
         <h3 class="sidebar-heading">{{ profileUser.username }}'s Stats</h3>

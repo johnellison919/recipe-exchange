@@ -1,0 +1,152 @@
+label {
+  line-height: 1;
+  font-size: 0.875rem;
+}
+
+input {
+  line-height: 1;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.75rem 0.375rem 0.75rem;
+  color: var(--color-gray-700);
+
+  &:focus {
+    border-color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    outline: unset;
+  }
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  line-height: 1;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.5rem;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  color: var(--color-gray-700);
+  width: 100%;
+
+  background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    outline: unset;
+  }
+
+  option {
+    color: var(--color-gray-700);
+  }
+}
+
+/***************************/
+
+.error-message {
+  background: color-mix(in oklab, var(--color-danger) 10%, transparent);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--color-gray-400);
+  font-size: 0.8125rem;
+}
+
+.field-error {
+  font-size: 0.8125rem;
+  color: var(--color-danger);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.form-section {
+  margin-bottom: 1.75rem;
+}
+
+.form-section h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-gray-800);
+  margin-bottom: 0.75rem;
+}
+
+form input,
+form textarea,
+form select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: var(--color-gray-900);
+  background: var(--color-white);
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+form input.error,
+form textarea.error,
+form select.error {
+  border-color: var(--color-danger);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-gray-200);
+  margin-top: 0.5rem;
+}
+
+.submit-button {
+  padding: 0.625rem 1.5rem;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  border: none;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

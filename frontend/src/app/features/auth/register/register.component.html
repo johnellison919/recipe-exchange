@@ -2,10 +2,17 @@
   <div class="register">
     <div class="register-container">
       <h1>Check Your Email</h1>
-      <p class="subtitle">We've sent a confirmation link to your email address. Please click it to activate your account.</p>
+      <p class="subtitle">
+        We've sent a confirmation link to your email address. Please click it to activate your
+        account.
+      </p>
       <p class="footer-text">
         Didn't receive the email?
-        <button class="link-button" (click)="resendConfirmation()" [disabled]="resendLoading()">
+        <button
+          class="button button-outline"
+          (click)="resendConfirmation()"
+          [disabled]="resendLoading()"
+        >
           @if (resendLoading()) {
             Sending...
           } @else {
@@ -29,7 +36,7 @@
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="username">Username</label>
-          <input id="username" type="text" formControlName="username" placeholder="johndoe" />
+          <input id="username" type="text" formControlName="username" />
           @if (
             registerForm.get('username')?.hasError('required') &&
             registerForm.get('username')?.touched
@@ -40,7 +47,7 @@
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+          <input id="email" type="email" formControlName="email" />
           @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {
             <span class="field-error">Please enter a valid email</span>
           }
@@ -48,7 +55,7 @@
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input id="password" type="password" formControlName="password" placeholder="••••••••" />
+          <input id="password" type="password" formControlName="password" />
           @if (
             registerForm.get('password')?.hasError('minlength') &&
             registerForm.get('password')?.touched
@@ -57,7 +64,11 @@
           }
         </div>
 
-        <button type="submit" class="button button-primary submit-button" [disabled]="registerForm.invalid || authLoading">
+        <button
+          type="submit"
+          class="button button-primary"
+          [disabled]="registerForm.invalid || authLoading"
+        >
           @if (authLoading) {
             Creating account...
           } @else {

@@ -1,0 +1,56 @@
+:root {
+  --color-primary: #0158c3;
+  --color-primary-light: color-mix(in oklab, var(--color-primary) 75%, #fff 15%);
+  --color-primary-dark: color-mix(in oklab, var(--color-primary) 75%, #000 15%);
+  --color-primary-disabled: color-mix(in oklab, var(--color-primary) 50%, #fff 50%);
+
+  --color-secondary: #ff8800;
+  --color-secondary-light: color-mix(in oklab, var(--color-secondary) 75%, #fff 15%);
+  --color-secondary-dark: color-mix(in oklab, var(--color-secondary) 75%, #000 15%);
+
+  --color-black: #000;
+  --color-white: #fff;
+
+  --color-info: #acf2ff;
+
+  --color-success: #198754;
+  --color-success-light: color-mix(in oklab, var(--color-success) 75%, #fff 15%);
+  --color-success-dark: color-mix(in oklab, var(--color-success) 75%, #000 15%);
+
+  --color-warning: #ffc107;
+  --color-warning-light: color-mix(in oklab, var(--color-warning) 75%, #fff 15%);
+  --color-warning-dark: color-mix(in oklab, var(--color-warning) 75%, #000 15%);
+
+  --color-danger: #dc3545;
+
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cad5e2;
+  --color-gray-400: #90a1b9;
+  --color-gray-500: #62748e;
+  --color-gray-600: #45556c;
+  --color-gray-700: #314158;
+  --color-gray-800: #1d293d;
+  --color-gray-900: #0f172b;
+
+  --container-width: 1000px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-gray-50);
+  color: var(--color-gray-900);
+}

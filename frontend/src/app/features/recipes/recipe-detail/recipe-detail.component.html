@@ -1,28 +1,28 @@
-<div class="recipe-detail-page">
-  <a routerLink="/" class="back-link">← Back to recipes</a>
+<a routerLink="/" class="back-link"><i class="ci ci-Arrow_Left_LG"></i>Back to recipes</a>
 
-  @if (loading()) {
-    <app-loading-spinner />
-  } @else if (error()) {
-    <p class="error-message">{{ error() }}</p>
-  } @else if (recipe()) {
-    <article class="recipe-detail">
-      @if (recipe()!.imageUrl) {
-        <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" />
-      }
+@if (loading()) {
+  <app-loading-spinner />
+} @else if (error()) {
+  <p class="error-message">{{ error() }}</p>
+} @else if (recipe()) {
+  <article class="recipe-detail">
+    @if (recipe()!.imageUrl) {
+      <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" />
+    }
 
-      <div class="recipe-header">
-        <h1 class="recipe-title">{{ recipe()!.title }}</h1>
+    <div class="recipe-header">
+      <h1 class="recipe-title">{{ recipe()!.title }}</h1>
 
-        <div class="recipe-meta">
-          <span class="meta-tag category">{{ recipe()!.category }}</span>
-          <span class="meta-tag difficulty" [class]="'difficulty-' + recipe()!.difficulty">
-            {{ recipe()!.difficulty }}
-          </span>
-          <span class="meta-tag">{{ recipe()!.prepTime + recipe()!.cookTime }} min total</span>
-          <span class="meta-tag">{{ recipe()!.servings }} servings</span>
-        </div>
+      <div class="recipe-meta">
+        <span class="meta-tag category">{{ recipe()!.category }}</span>
+        <span class="meta-tag difficulty" [class]="'difficulty-' + recipe()!.difficulty">
+          {{ recipe()!.difficulty }}
+        </span>
+        <span class="meta-tag">{{ recipe()!.prepTime + recipe()!.cookTime }} min total</span>
+        <span class="meta-tag">{{ recipe()!.servings }} servings</span>
+      </div>
 
+      <div class="recipe-author-and-actions">
         <div class="recipe-author">
           @if (recipe()!.author.avatarUrl) {
             <img
@@ -36,7 +36,6 @@
             <span class="posted-time">{{ recipe()!.createdAt | relativeTime }}</span>
           </div>
         </div>
-
         <div class="recipe-actions">
           <app-vote-buttons
             [recipeId]="recipe()!.id"
@@ -44,59 +43,40 @@
             [userVote]="recipe()!.userVote ?? null"
             (voteChange)="onVoteChange()"
           />
-          @if (isAuthenticated()) {
-            <button
-              type="button"
-              class="save-button"
-              [class.saved]="recipe()!.isSaved"
-              (click)="onToggleSave()"
-              [title]="recipe()!.isSaved ? 'Unsave recipe' : 'Save recipe'"
-            >
-              @if (recipe()!.isSaved) {
-                <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-                  <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-                </svg>
-              } @else {
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
-                  <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-                </svg>
-              }
-              <span class="save-text">{{ recipe()!.isSaved ? 'Saved' : 'Save' }}</span>
-            </button>
-          }
           @if (isAuthor()) {
-            <a [routerLink]="['/recipes', recipe()!.id, 'edit']" class="button button-outline edit-button">Edit Recipe</a>
+            <a [routerLink]="['/recipes', recipe()!.id, 'edit']" class="button button-outline"
+              >Edit Recipe</a
+            >
           }
         </div>
       </div>
+    </div>
+    <p class="recipe-description">{{ recipe()!.description }}</p>
 
-      <p class="recipe-description">{{ recipe()!.description }}</p>
+    <div class="recipe-body">
+      <section class="ingredients-section">
+        <h2>Ingredients</h2>
+        <ul class="ingredients-list">
+          @for (ingredient of recipe()!.ingredients; track $index) {
+            <li class="ingredient-item">
+              <span class="ingredient-amount">{{ ingredient.amount }}</span>
+              @if (ingredient.unit) {
+                <span class="ingredient-unit">{{ ingredient.unit }}</span>
+              }
+              <span class="ingredient-name">{{ ingredient.name }}</span>
+            </li>
+          }
+        </ul>
+      </section>
 
-      <div class="recipe-body">
-        <section class="ingredients-section">
-          <h2>Ingredients</h2>
-          <ul class="ingredients-list">
-            @for (ingredient of recipe()!.ingredients; track $index) {
-              <li class="ingredient-item">
-                <span class="ingredient-amount">{{ ingredient.amount }}</span>
-                @if (ingredient.unit) {
-                  <span class="ingredient-unit">{{ ingredient.unit }}</span>
-                }
-                <span class="ingredient-name">{{ ingredient.name }}</span>
-              </li>
-            }
-          </ul>
-        </section>
-
-        <section class="instructions-section">
-          <h2>Instructions</h2>
-          <ol class="instructions-list">
-            @for (step of recipe()!.instructions; track $index) {
-              <li class="instruction-item">{{ step }}</li>
-            }
-          </ol>
-        </section>
-      </div>
-    </article>
-  }
-</div>
+      <section class="instructions-section">
+        <h2>Instructions</h2>
+        <ol class="instructions-list">
+          @for (step of recipe()!.instructions; track $index) {
+            <li class="instruction-item">{{ step }}</li>
+          }
+        </ol>
+      </section>
+    </div>
+  </article>
+}
