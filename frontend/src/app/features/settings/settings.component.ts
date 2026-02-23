@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/auth.service';
 import { getAvatarUrl } from '../../shared/utils/avatar.util';
@@ -17,10 +17,16 @@ export class SettingsComponent {
   // Avatar
   protected readonly avatarPreview = signal<string>('');
   protected readonly avatarUrl = signal<string | null>(null);
+  private readonly originalAvatarUrl = signal<string | null>(null);
   protected readonly avatarLoading = signal(false);
   protected readonly avatarSuccess = signal<string | null>(null);
   protected readonly avatarError = signal<string | null>(null);
   protected readonly avatarUrlInput = signal('');
+  protected readonly avatarChanged = computed(() => {
+    const urlInput = this.avatarUrlInput();
+    if (urlInput) return true;
+    return this.avatarUrl() !== this.originalAvatarUrl();
+  });
 
   // Email
   protected readonly emailForm = this.fb.group({
@@ -44,6 +50,7 @@ export class SettingsComponent {
     const user = this.authService.currentUser();
     if (user) {
       this.avatarUrl.set(user.avatarUrl ?? null);
+      this.originalAvatarUrl.set(user.avatarUrl ?? null);
       this.avatarPreview.set(getAvatarUrl(user.avatarUrl, user.username));
     }
   }
@@ -95,6 +102,7 @@ export class SettingsComponent {
     this.authService.updateAvatar(newUrl).subscribe({
       next: (user) => {
         this.avatarUrl.set(user.avatarUrl ?? null);
+        this.originalAvatarUrl.set(user.avatarUrl ?? null);
         this.avatarPreview.set(getAvatarUrl(user.avatarUrl, user.username));
         this.avatarUrlInput.set('');
         this.avatarLoading.set(false);
@@ -115,6 +123,7 @@ export class SettingsComponent {
     this.authService.updateAvatar(null).subscribe({
       next: (user) => {
         this.avatarUrl.set(null);
+        this.originalAvatarUrl.set(null);
         this.avatarPreview.set(getAvatarUrl(null, user.username));
         this.avatarUrlInput.set('');
         this.avatarLoading.set(false);

@@ -38,7 +38,7 @@
             Reset to Default
           </button>
         </div>
-        <button class="button button-primary" (click)="saveAvatar()" [disabled]="avatarLoading()">
+        <button class="button button-primary" (click)="saveAvatar()" [disabled]="!avatarChanged() || avatarLoading()">
           @if (avatarLoading()) {
             Saving...
           } @else {
