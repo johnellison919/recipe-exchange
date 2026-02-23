@@ -55,7 +55,7 @@
 
   .current-value {
     font-size: 0.875rem;
-    color: var(--color-gray-600);
+    color: var(--color-text-muted);
     margin-bottom: 1rem;
   }
 }

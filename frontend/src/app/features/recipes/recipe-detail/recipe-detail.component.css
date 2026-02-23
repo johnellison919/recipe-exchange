@@ -73,7 +73,7 @@
         padding: 0.25rem 0.625rem;
         border-radius: 9999px;
         background: var(--color-surface-raised, #f3f4f6);
-        color: var(--color-text-muted, #6b7280);
+        color: var(--color-text-muted);
         text-transform: capitalize;
       }
 
@@ -119,7 +119,7 @@
         }
         .posted-time {
           font-size: 0.75rem;
-          color: var(--color-gray-500);
+          color: var(--color-text-muted);
         }
       }
 
@@ -133,7 +133,7 @@
 
   .recipe-description {
     font-size: 1rem;
-    color: var(--color-gray-700);
+    color: var(--color-text-secondary);
     margin-bottom: 2rem;
   }
 
@@ -167,7 +167,7 @@
         }
 
         .ingredient-unit {
-          color: var(--color-gray-500);
+          color: var(--color-text-muted);
         }
       }
     }

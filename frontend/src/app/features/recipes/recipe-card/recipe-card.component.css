@@ -112,7 +112,7 @@
 
       .recipe-description {
         font-size: 0.875rem;
-        color: var(--color-gray-700);
+        color: var(--color-text-secondary);
         margin-bottom: 1rem;
         overflow: hidden;
       }
@@ -145,7 +145,7 @@
             .author-name {
               font-size: 0.875rem;
               font-weight: 500;
-              color: var(--color-gray-700);
+              color: var(--color-text-secondary);
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -153,7 +153,7 @@
 
             .recipe-time {
               font-size: 0.75rem;
-              color: var(--color-gray-500);
+              color: var(--color-text-muted);
             }
           }
         }

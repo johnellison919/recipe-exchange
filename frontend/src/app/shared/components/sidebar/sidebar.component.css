@@ -31,7 +31,7 @@
           background: unset;
           border: unset;
           padding-right: 0.75rem;
-          color: var(--color-gray-600);
+          color: var(--color-text-muted);
           font-size: 1rem;
           cursor: pointer;
           display: flex;
@@ -61,7 +61,7 @@
           }
 
           .stat-label {
-            color: var(--color-gray-700);
+            color: var(--color-text-secondary);
           }
         }
       }
@@ -81,5 +81,5 @@
 
 .coming-soon {
   text-align: center;
-  color: var(--color-gray-500);
+  color: var(--color-text-muted);
 }

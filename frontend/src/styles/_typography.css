@@ -16,7 +16,7 @@
 h1,
 h2,
 h3 {
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
   line-height: 1.2;
 }
 
@@ -34,6 +34,6 @@ h3 {
 }
 
 .subtitle {
-  color: var(--color-gray-600);
+  color: var(--color-text-muted);
   padding-bottom: 1rem;
 }

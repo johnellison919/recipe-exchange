@@ -34,6 +34,10 @@
   --color-gray-800: #1d293d;
   --color-gray-900: #0f172b;
 
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-700);
+  --color-text-muted: var(--color-gray-500);
+
   --container-width: 1000px;
 }
 
@@ -52,5 +56,5 @@ body {
 
 body {
   background: var(--color-gray-50);
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
 }
