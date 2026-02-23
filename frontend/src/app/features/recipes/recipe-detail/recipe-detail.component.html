@@ -6,9 +6,30 @@
   <p class="error-message">{{ error() }}</p>
 } @else if (recipe()) {
   <article class="recipe-detail">
-    @if (recipe()!.imageUrl) {
-      <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" />
-    }
+    <div class="recipe-image-container">
+      @if (recipe()!.imageUrl) {
+        <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" />
+      }
+      @if (isAuthenticated()) {
+        <button
+          type="button"
+          class="save-button"
+          [class.saved]="displayIsSaved()"
+          (click)="onToggleSave()"
+          [title]="displayIsSaved() ? 'Unsave recipe' : 'Save recipe'"
+        >
+          @if (displayIsSaved()) {
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+            </svg>
+          }
+        </button>
+      }
+    </div>
 
     <div class="recipe-header">
       <h1 class="recipe-title">{{ recipe()!.title }}</h1>

@@ -14,12 +14,46 @@
 }
 
 .recipe-detail {
-  .recipe-image {
-    width: 100%;
-    max-height: 25rem;
-    object-fit: cover;
-    border-radius: 0.25rem;
+  .recipe-image-container {
+    position: relative;
     margin-bottom: 1rem;
+
+    .recipe-image {
+      width: 100%;
+      max-height: 25rem;
+      object-fit: cover;
+      border-radius: 0.25rem;
+    }
+
+    .save-button {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 1;
+      background: var(--color-gray-50);
+      border: none;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0;
+
+      &:hover {
+        color: var(--color-warning);
+      }
+
+      &.saved {
+        color: var(--color-warning);
+
+        &:hover {
+          color: var(--color-warning-dark);
+        }
+      }
+    }
   }
 
   .recipe-header {
