@@ -10,11 +10,22 @@
       >
         @if (displayIsSaved()) {
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+            <polygon
+              points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+            />
           </svg>
         } @else {
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            width="20"
+            height="20"
+          >
+            <polygon
+              points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+            />
           </svg>
         }
       </button>
@@ -27,7 +38,10 @@
 
     <div class="recipe-body">
       <div class="recipe-header">
-        <a [routerLink]="['/recipes', recipe().id, slugify(recipe().title)]" class="recipe-title-link">
+        <a
+          [routerLink]="['/recipes', recipe().id, slugify(recipe().title)]"
+          class="recipe-title-link"
+        >
           <h3 class="recipe-title">{{ recipe().title }}</h3>
         </a>
         <div class="recipe-meta">
@@ -38,7 +52,13 @@
         </div>
       </div>
 
-      <p class="recipe-description">{{ recipe().description }}</p>
+      <p class="recipe-description">
+        {{
+          recipe().description.length > 80
+            ? recipe().description.slice(0, 80) + '...'
+            : recipe().description
+        }}
+      </p>
 
       <div class="recipe-footer">
         <div class="author-info">
