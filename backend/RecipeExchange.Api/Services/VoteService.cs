@@ -5,7 +5,7 @@ using RecipeExchange.Api.Models;
 
 namespace RecipeExchange.Api.Services;
 
-public class VoteService(AppDbContext db, ILogger<VoteService> logger)
+public class VoteService(AppDbContext db)
 {
     public async Task<(VoteResponse? response, string? error)> Vote(string recipeId, string userId, string? voteType)
     {
