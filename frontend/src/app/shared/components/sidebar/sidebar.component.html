@@ -12,7 +12,7 @@
           (ngModelChange)="onSearchInput($event)"
           (keydown.enter)="search()"
         />
-        <button type="button" class="search-button" (click)="search()">
+        <button type="button" class="search-button" aria-label="Search recipes" (click)="search()">
           <i class="ci ci-Search_Magnifying_Glass"></i>
         </button>
       </div>

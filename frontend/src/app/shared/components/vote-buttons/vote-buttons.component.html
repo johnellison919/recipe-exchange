@@ -5,6 +5,7 @@
     [class.active]="isUpvoted"
     [disabled]="!isAuthenticated"
     (click)="onUpvote()"
+    [attr.aria-label]="isAuthenticated ? 'Upvote' : 'Login to vote'"
   >
     <i class="ci ci-Arrow_Circle_Up"></i>
   </button>
@@ -17,6 +18,7 @@
     [disabled]="!isAuthenticated"
     (click)="onDownvote()"
     [title]="isAuthenticated ? 'Downvote' : 'Login to vote'"
+    [attr.aria-label]="isAuthenticated ? 'Downvote' : 'Login to vote'"
   >
     <i class="ci ci-Arrow_Circle_Down"></i>
   </button>
