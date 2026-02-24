@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DateRange, RecipeService } from '../../../core/recipe.service';
 import { RecipeCategory } from '../../../models/recipe.model';
@@ -13,9 +13,10 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
   templateUrl: './recipe-feed.component.html',
   styleUrl: './recipe-feed.component.css',
 })
-export class RecipeFeedComponent {
+export class RecipeFeedComponent implements OnDestroy {
   protected readonly recipeService = inject(RecipeService);
   private readonly http = inject(HttpClient);
+  private timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   protected readonly categories = signal<string[]>([]);
   protected readonly currentPage = signal(1);
@@ -61,32 +62,42 @@ export class RecipeFeedComponent {
     return this.recipeService.dateRange();
   }
 
+  ngOnDestroy(): void {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+  }
+
   setCategory(category: RecipeCategory | null): void {
     this.currentPage.set(1);
     this.recipeService.setCategoryFilter(category);
-    setTimeout(() => {
-      this.recipeService.captureSnapshot();
-    }, 100);
+    this.scheduleSnapshot();
   }
 
   setSortBy(sortBy: 'newest' | 'top-rated'): void {
     this.currentPage.set(1);
     this.recipeService.setSortBy(sortBy);
-    setTimeout(() => {
-      this.recipeService.captureSnapshot();
-    }, 100);
+    this.scheduleSnapshot();
   }
 
   setDateRange(dateRange: DateRange): void {
     this.currentPage.set(1);
     this.recipeService.setDateRange(dateRange);
-    setTimeout(() => {
-      this.recipeService.captureSnapshot();
-    }, 100);
+    this.scheduleSnapshot();
   }
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  private scheduleSnapshot(): void {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+    this.timeoutId = setTimeout(() => {
+      this.recipeService.captureSnapshot();
+      this.timeoutId = null;
+    }, 100);
   }
 }
