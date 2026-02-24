@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace RecipeExchange.Api.Controllers;
 
 [ApiController]
 [Route("api/upload")]
+[EnableRateLimiting("general")]
 public class UploadController(IWebHostEnvironment env) : ControllerBase
 {
     private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
@@ -15,6 +17,10 @@ public class UploadController(IWebHostEnvironment env) : ControllerBase
     {
         if (file is null || file.Length == 0)
             return BadRequest("No file provided");
+
+        const long MaxFileSize = 5 * 1024 * 1024; // 5 MB
+        if (file.Length > MaxFileSize)
+            return BadRequest(new { error = "File must be under 5 MB." });
 
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!AllowedExtensions.Contains(ext))
