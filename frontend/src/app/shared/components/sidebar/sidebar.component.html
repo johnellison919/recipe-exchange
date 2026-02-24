@@ -7,8 +7,9 @@
           type="text"
           class="search-input"
           placeholder="Search"
+          maxlength="200"
           [ngModel]="searchQuery()"
-          (ngModelChange)="searchQuery.set($event)"
+          (ngModelChange)="onSearchInput($event)"
           (keydown.enter)="search()"
         />
         <button type="button" class="search-button" (click)="search()">
