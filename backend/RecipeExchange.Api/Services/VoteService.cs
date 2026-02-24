@@ -5,12 +5,15 @@ using RecipeExchange.Api.Models;
 
 namespace RecipeExchange.Api.Services;
 
-public class VoteService(AppDbContext db)
+public class VoteService(AppDbContext db, ILogger<VoteService> logger)
 {
-    public async Task<VoteResponse?> Vote(string recipeId, string userId, string? voteType)
+    public async Task<(VoteResponse? response, string? error)> Vote(string recipeId, string userId, string? voteType)
     {
+        if (voteType is not null && voteType != "upvote" && voteType != "downvote")
+            return (null, "Invalid vote type.");
+
         var recipe = await db.Recipes.FindAsync(recipeId);
-        if (recipe is null) return null;
+        if (recipe is null) return (null, "not_found");
 
         var existing = await db.Votes
             .FirstOrDefaultAsync(v => v.RecipeId == recipeId && v.UserId == userId);
@@ -36,7 +39,7 @@ public class VoteService(AppDbContext db)
             recipe.VoteScore += existing.VoteType == "upvote" ? -1 : 1;
             db.Votes.Remove(existing);
             await db.SaveChangesAsync();
-            return new VoteResponse(null, recipe.VoteScore);
+            return (new VoteResponse(null, recipe.VoteScore), null);
         }
         else
         {
@@ -52,6 +55,6 @@ public class VoteService(AppDbContext db)
             .Select(v => (string?)v.VoteType)
             .FirstOrDefaultAsync();
 
-        return new VoteResponse(currentVote, recipe.VoteScore);
+        return (new VoteResponse(currentVote, recipe.VoteScore), null);
     }
 }
