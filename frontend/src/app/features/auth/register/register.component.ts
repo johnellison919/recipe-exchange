@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, isDevMode, signal } from '@angular/core';
 import { AuthService } from '../../../core/auth.service';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -42,7 +42,7 @@ export class RegisterComponent {
         this.registrationSuccess.set(true);
       },
       error: (error) => {
-        console.error('Registration failed:', error);
+        if (isDevMode()) console.error('Registration failed:', error);
       },
     });
   }

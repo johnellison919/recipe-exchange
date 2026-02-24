@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, isDevMode } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/auth.service';
 import { Router, RouterLink } from '@angular/router';
@@ -39,7 +39,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Login failed:', error);
+        if (isDevMode()) console.error('Login failed:', error);
       },
     });
   }
