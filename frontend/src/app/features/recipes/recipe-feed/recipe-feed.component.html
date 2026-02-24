@@ -66,6 +66,7 @@
           <p>No recipes found. Be the first to share a recipe!</p>
         </div>
       } @else {
+        <h2 class="sr-only">Recipes</h2>
         <div class="recipe-grid">
           @for (recipe of paginatedRecipes(); track recipe.id) {
             <app-recipe-card [recipe]="recipe" />

@@ -37,7 +37,7 @@
 
     @if (profileContext.user(); as profileUser) {
       <div class="sidebar-section">
-        <h3 class="sidebar-heading">{{ profileUser.username }}'s Stats</h3>
+        <h2 class="sidebar-heading">{{ profileUser.username }}'s Stats</h2>
         <div class="stats-grid">
           <div class="stat-item">
             <span class="stat-value">{{ profileUser.recipeCount ?? 0 }}</span>
@@ -50,12 +50,12 @@
         </div>
       </div>
       <div class="sidebar-section">
-        <h3 class="sidebar-heading">Awards</h3>
+        <h2 class="sidebar-heading">Awards</h2>
         <p class="coming-soon">Coming soon</p>
       </div>
     }
     <div class="sidebar-section">
-      <h3 class="sidebar-heading">Recently Viewed</h3>
+      <h2 class="sidebar-heading">Recently Viewed</h2>
       @if (recentlyViewed.entries().length === 0) {
         <p class="coming-soon">No recipes viewed yet</p>
       } @else {
