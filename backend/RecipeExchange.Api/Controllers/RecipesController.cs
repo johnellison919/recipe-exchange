@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using RecipeExchange.Api.Dtos;
 using RecipeExchange.Api.Models;
 using RecipeExchange.Api.Services;
@@ -9,6 +10,7 @@ namespace RecipeExchange.Api.Controllers;
 
 [ApiController]
 [Route("api/recipes")]
+[EnableRateLimiting("general")]
 public class RecipesController(RecipeService recipeService, VoteService voteService, SavedRecipeService savedRecipeService) : ControllerBase
 {
     [HttpGet("categories")]
@@ -77,8 +79,10 @@ public class RecipesController(RecipeService recipeService, VoteService voteServ
     public async Task<IActionResult> Vote(string id, [FromBody] VoteRequest request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var result = await voteService.Vote(id, userId, request.VoteType);
-        return result is null ? NotFound() : Ok(result);
+        var (result, error) = await voteService.Vote(id, userId, request.VoteType);
+        if (error == "not_found") return NotFound();
+        if (error is not null) return BadRequest(new { error });
+        return Ok(result);
     }
 
     [Authorize]
