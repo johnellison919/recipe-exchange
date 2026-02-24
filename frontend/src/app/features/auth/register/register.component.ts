@@ -17,7 +17,7 @@ export class RegisterComponent {
   protected readonly registerForm = this.formBuilder.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   protected readonly registrationSuccess = signal(false);
