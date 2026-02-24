@@ -131,7 +131,13 @@ app.Use(async (context, next) =>
 
 app.UseCors();
 app.UseRateLimiter();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
+    }
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
