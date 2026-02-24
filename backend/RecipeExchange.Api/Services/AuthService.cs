@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RecipeExchange.Api.Data;
@@ -7,26 +8,66 @@ using RecipeExchange.Api.Models;
 
 namespace RecipeExchange.Api.Services;
 
-public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
+public class AuthService(AppDbContext db, IPasswordHasher<User> hasher, ILogger<AuthService> logger)
 {
+    private const int MaxFailedAttempts = 5;
+    private static readonly TimeSpan LockoutDuration = TimeSpan.FromMinutes(15);
+
     public async Task<(User? user, string? error)> ValidateLogin(LoginRequest request)
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
         if (user is null)
+        {
+            logger.LogWarning("Failed login attempt for unknown email {Email}", request.Email);
             return (null, "Invalid email or password.");
+        }
+
+        // Check lockout
+        if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
+        {
+            logger.LogWarning("Login attempt for locked account {Email}", request.Email);
+            return (null, "Account is temporarily locked. Try again later.");
+        }
 
         var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (result == PasswordVerificationResult.Failed)
+        {
+            user.FailedLoginAttempts++;
+            if (user.FailedLoginAttempts >= MaxFailedAttempts)
+            {
+                user.LockoutEnd = DateTime.UtcNow.Add(LockoutDuration);
+                logger.LogWarning("Account locked after {Attempts} failed attempts for {Email}", user.FailedLoginAttempts, request.Email);
+            }
+            else
+            {
+                logger.LogWarning("Failed login attempt {Attempt} for {Email}", user.FailedLoginAttempts, request.Email);
+            }
+            await db.SaveChangesAsync();
             return (null, "Invalid email or password.");
+        }
 
         if (!user.EmailConfirmed)
-            return (null, "Please confirm your email address before logging in.");
+            return (null, "Invalid email or password.");
+
+        // Reset failed attempts on successful login
+        if (user.FailedLoginAttempts > 0)
+        {
+            user.FailedLoginAttempts = 0;
+            user.LockoutEnd = null;
+            await db.SaveChangesAsync();
+        }
 
         return (user, null);
     }
 
     public async Task<(string? token, string? error)> Register(RegisterRequest request)
     {
+        // Password strength validation
+        if (request.Password.Length < 8)
+            return (null, "Password must be at least 8 characters.");
+        if (!request.Password.Any(char.IsUpper) || !request.Password.Any(char.IsDigit))
+            return (null, "Password must contain at least one uppercase letter and one digit.");
+
         if (await db.Users.AnyAsync(u => u.Email == request.Email))
             return (null, "Email already in use.");
 
@@ -49,6 +90,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         db.Users.Add(user);
         await db.SaveChangesAsync();
 
+        logger.LogInformation("New user registered: {Username} ({Email})", request.Username, request.Email);
+
         return (token, null);
     }
 
@@ -61,7 +104,7 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         if (user.EmailConfirmed)
             return (true, null);
 
-        if (user.EmailConfirmationToken != token)
+        if (!FixedTimeEquals(user.EmailConfirmationToken, token))
             return (false, "Invalid confirmation link.");
 
         if (user.EmailConfirmationTokenExpiry < DateTime.UtcNow)
@@ -71,6 +114,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         user.EmailConfirmationToken = null;
         user.EmailConfirmationTokenExpiry = null;
         await db.SaveChangesAsync();
+
+        logger.LogInformation("Email confirmed for {Email}", email);
 
         return (true, null);
     }
@@ -86,6 +131,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         user.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1);
         await db.SaveChangesAsync();
 
+        logger.LogInformation("Password reset requested for {Email}", email);
+
         return (user, token);
     }
 
@@ -95,7 +142,7 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         if (user is null)
             return (false, "Invalid reset link.");
 
-        if (user.PasswordResetToken != token)
+        if (!FixedTimeEquals(user.PasswordResetToken, token))
             return (false, "Invalid reset link.");
 
         if (user.PasswordResetTokenExpiry < DateTime.UtcNow)
@@ -105,6 +152,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         user.PasswordResetToken = null;
         user.PasswordResetTokenExpiry = null;
         await db.SaveChangesAsync();
+
+        logger.LogInformation("Password reset completed for {Email}", email);
 
         return (true, null);
     }
@@ -161,6 +210,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         user.EmailChangeTokenExpiry = DateTime.UtcNow.AddHours(24);
         await db.SaveChangesAsync();
 
+        logger.LogInformation("Email change requested for user {UserId} to {NewEmail}", userId, newEmail);
+
         return (token, null);
     }
 
@@ -170,7 +221,7 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         if (user is null)
             return (false, "User not found.");
 
-        if (user.EmailChangeToken != token)
+        if (!FixedTimeEquals(user.EmailChangeToken, token))
             return (false, "Invalid confirmation link.");
 
         if (user.EmailChangeTokenExpiry < DateTime.UtcNow)
@@ -179,11 +230,14 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         if (await db.Users.AnyAsync(u => u.Email == user.PendingEmail))
             return (false, "Email already in use.");
 
+        var oldEmail = user.Email;
         user.Email = user.PendingEmail!;
         user.PendingEmail = null;
         user.EmailChangeToken = null;
         user.EmailChangeTokenExpiry = null;
         await db.SaveChangesAsync();
+
+        logger.LogInformation("Email changed for user {UserId} from {OldEmail} to {NewEmail}", userId, oldEmail, user.Email);
 
         return (true, null);
     }
@@ -201,6 +255,8 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         user.PasswordHash = hasher.HashPassword(user, newPassword);
         await db.SaveChangesAsync();
 
+        logger.LogInformation("Password changed for user {UserId}", userId);
+
         return (true, null);
     }
 
@@ -214,6 +270,13 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher)
         await db.SaveChangesAsync();
 
         return (true, null);
+    }
+
+    private static bool FixedTimeEquals(string? stored, string provided)
+    {
+        var storedBytes = Encoding.UTF8.GetBytes(stored ?? "");
+        var providedBytes = Encoding.UTF8.GetBytes(provided);
+        return CryptographicOperations.FixedTimeEquals(storedBytes, providedBytes);
     }
 
     private static string GenerateSecureToken()

@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RecipeExchange.Api.Data;
 using RecipeExchange.Api.Dtos;
 using RecipeExchange.Api.Models;
 
 namespace RecipeExchange.Api.Services;
 
-public class RecipeService(AppDbContext db)
+public class RecipeService(AppDbContext db, ILogger<RecipeService> logger)
 {
     public async Task<List<RecipeResponse>> GetAll(string? userId, string? authorId = null)
     {
