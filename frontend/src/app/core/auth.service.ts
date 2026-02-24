@@ -1,4 +1,5 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, map, throwError } from 'rxjs';
@@ -11,6 +12,7 @@ import { getUserErrorMessage } from '../shared/utils/error.util';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private readonly currentUserSignal = signal<User | null>(null);
   private readonly authLoadingSignal = signal<boolean>(false);
@@ -26,6 +28,8 @@ export class AuthService {
   }
 
   private initialize(): void {
+    if (!this.isBrowser) return;
+
     // Restore user from localStorage for instant display, then verify with server
     const stored = localStorage.getItem('currentUser');
     if (stored) {

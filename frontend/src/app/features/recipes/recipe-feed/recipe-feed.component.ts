@@ -1,4 +1,5 @@
-import { Component, computed, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, PLATFORM_ID, signal, untracked } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DateRange, RecipeService } from '../../../core/recipe.service';
 import { RecipeCategory } from '../../../models/recipe.model';
@@ -16,6 +17,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 export class RecipeFeedComponent implements OnDestroy {
   protected readonly recipeService = inject(RecipeService);
   private readonly http = inject(HttpClient);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   protected readonly categories = signal<string[]>([]);
@@ -40,6 +42,7 @@ export class RecipeFeedComponent implements OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.isBrowser) return;
     this.recipeService.loadRecipes();
     this.http.get<string[]>('/api/recipes/categories').subscribe({
       next: (cats) => this.categories.set(cats),
@@ -88,7 +91,7 @@ export class RecipeFeedComponent implements OnDestroy {
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (this.isBrowser) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   private scheduleSnapshot(): void {
