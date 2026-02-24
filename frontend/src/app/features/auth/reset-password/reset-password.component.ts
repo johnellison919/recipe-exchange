@@ -2,6 +2,7 @@ import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/cor
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/auth.service';
+import { getUserErrorMessage } from '../../../shared/utils/error.util';
 
 @Component({
   selector: 'app-reset-password',
@@ -46,7 +47,7 @@ export class ResetPasswordComponent {
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMessage.set(err.error?.error ?? 'Password reset failed.');
+        this.errorMessage.set(getUserErrorMessage(err, 'Password reset failed.'));
       },
     });
   }

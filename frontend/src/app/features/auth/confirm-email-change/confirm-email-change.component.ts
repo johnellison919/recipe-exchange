@@ -1,6 +1,7 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
+import { getUserErrorMessage } from '../../../shared/utils/error.util';
 
 @Component({
   selector: 'app-confirm-email-change',
@@ -75,7 +76,7 @@ export class ConfirmEmailChangeComponent {
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMessage.set(err.error?.error ?? 'Email change confirmation failed.');
+        this.errorMessage.set(getUserErrorMessage(err, 'Email change confirmation failed.'));
       },
     });
   }

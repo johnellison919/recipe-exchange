@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@a
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/auth.service';
 import { getAvatarUrl } from '../../shared/utils/avatar.util';
+import { getUserErrorMessage } from '../../shared/utils/error.util';
 
 @Component({
   selector: 'app-settings',
@@ -110,7 +111,7 @@ export class SettingsComponent {
       },
       error: (err) => {
         this.avatarLoading.set(false);
-        this.avatarError.set(err.error?.error ?? 'Failed to update avatar.');
+        this.avatarError.set(getUserErrorMessage(err, 'Failed to update avatar.'));
       },
     });
   }
@@ -131,7 +132,7 @@ export class SettingsComponent {
       },
       error: (err) => {
         this.avatarLoading.set(false);
-        this.avatarError.set(err.error?.error ?? 'Failed to reset avatar.');
+        this.avatarError.set(getUserErrorMessage(err, 'Failed to reset avatar.'));
       },
     });
   }
@@ -151,7 +152,7 @@ export class SettingsComponent {
       },
       error: (err) => {
         this.emailLoading.set(false);
-        this.emailError.set(err.error?.error ?? 'Failed to change email.');
+        this.emailError.set(getUserErrorMessage(err, 'Failed to change email.'));
       },
     });
   }
@@ -177,7 +178,7 @@ export class SettingsComponent {
       },
       error: (err) => {
         this.passwordLoading.set(false);
-        this.passwordError.set(err.error?.error ?? 'Failed to change password.');
+        this.passwordError.set(getUserErrorMessage(err, 'Failed to change password.'));
       },
     });
   }

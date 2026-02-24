@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { User, UserLogin, UserRegistration } from '../models/user.model';
+import { getUserErrorMessage } from '../shared/utils/error.util';
 
 @Injectable({
   providedIn: 'root',
@@ -66,8 +67,7 @@ export class AuthService {
         return user;
       }),
       catchError((err) => {
-        const message = err.error?.error ?? 'Invalid email or password';
-        this.authErrorSignal.set(message);
+        this.authErrorSignal.set(getUserErrorMessage(err, 'Invalid email or password.'));
         this.authLoadingSignal.set(false);
         return throwError(() => err);
       }),
@@ -84,8 +84,7 @@ export class AuthService {
         return response;
       }),
       catchError((err) => {
-        const message = err.error?.error ?? 'Registration failed';
-        this.authErrorSignal.set(message);
+        this.authErrorSignal.set(getUserErrorMessage(err, 'Registration failed.'));
         this.authLoadingSignal.set(false);
         return throwError(() => err);
       }),
