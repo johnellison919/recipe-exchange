@@ -82,15 +82,14 @@
           .category,
           .difficulty {
             font-size: 0.75rem;
-            font-weight: 700;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
             text-transform: capitalize;
           }
 
           .category {
-            background: var(--color-primary-light);
-            color: var(--color-gray-50);
+            background: var(--color-gray-100);
+            color: var(--color-text-secondary);
           }
 
           .difficulty-easy {

@@ -1,5 +1,5 @@
 :root {
-  --color-primary: #0158c3;
+  --color-primary: #0153b7;
   --color-primary-light: color-mix(in oklab, var(--color-primary) 75%, #fff 15%);
   --color-primary-dark: color-mix(in oklab, var(--color-primary) 75%, #000 15%);
   --color-primary-disabled: color-mix(in oklab, var(--color-primary) 50%, #fff 50%);

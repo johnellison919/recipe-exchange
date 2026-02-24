@@ -21,9 +21,9 @@
     }
 
     &.active {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-primary);
       border-color: var(--color-primary);
-      color: var(--color-gray-50);
+      color: var(--color-white);
       cursor: pointer;
     }
   }

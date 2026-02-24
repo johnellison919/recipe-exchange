@@ -38,7 +38,7 @@
 
 .button-primary {
   background-color: var(--color-primary);
-  color: var(--color-gray-50);
+  color: var(--color-white);
 
   &:hover {
     background-color: var(--color-primary-dark);
