@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace RecipeExchange.Api.Dtos;
 
-public record LoginRequest(string Email, string Password);
+public record LoginRequest(
+    [Required, EmailAddress] string Email,
+    [Required, StringLength(256, MinimumLength = 8)] string Password);
 
 public record RegisterRequest(
-    string Username,
-    string Email,
-    string Password);
+    [Required, StringLength(50, MinimumLength = 3)] string Username,
+    [Required, EmailAddress] string Email,
+    [Required, StringLength(256, MinimumLength = 8)] string Password);
 
 public record UserResponse(
     string Id,
@@ -25,18 +29,29 @@ public record UserProfileResponse(
     int RecipeCount,
     int TotalVoteScore);
 
-public record ConfirmEmailRequest(string Email, string Token);
+public record ConfirmEmailRequest(
+    [Required, EmailAddress] string Email,
+    [Required] string Token);
 
-public record ForgotPasswordRequest(string Email);
+public record ForgotPasswordRequest(
+    [Required, EmailAddress] string Email);
 
-public record ResetPasswordRequest(string Email, string Token, string NewPassword);
+public record ResetPasswordRequest(
+    [Required, EmailAddress] string Email,
+    [Required] string Token,
+    [Required, StringLength(256, MinimumLength = 8)] string NewPassword);
 
-public record ResendConfirmationRequest(string Email);
+public record ResendConfirmationRequest(
+    [Required, EmailAddress] string Email);
 
-public record ChangeEmailRequest(string NewEmail);
+public record ChangeEmailRequest(
+    [Required, EmailAddress] string NewEmail);
 
-public record ConfirmEmailChangeRequest(string Token);
+public record ConfirmEmailChangeRequest(
+    [Required] string Token);
 
-public record ChangePasswordRequest(string CurrentPassword, string NewPassword);
+public record ChangePasswordRequest(
+    [Required] string CurrentPassword,
+    [Required, StringLength(256, MinimumLength = 8)] string NewPassword);
 
 public record UpdateAvatarRequest(string? AvatarUrl);
