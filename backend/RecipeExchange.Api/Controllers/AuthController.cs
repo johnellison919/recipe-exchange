@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using RecipeExchange.Api.Dtos;
 using RecipeExchange.Api.Models;
 using RecipeExchange.Api.Services;
@@ -11,6 +12,7 @@ namespace RecipeExchange.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
+[EnableRateLimiting("auth")]
 public class AuthController(AuthService authService, EmailService emailService) : ControllerBase
 {
     [HttpPost("login")]
