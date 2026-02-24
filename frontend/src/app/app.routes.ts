@@ -1,18 +1,7 @@
 import { Routes } from '@angular/router';
-import { RegisterComponent } from './features/auth/register/register.component';
 import { guestGuard } from './core/guards/guest.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { RecipeFeedComponent } from './features/recipes/recipe-feed/recipe-feed.component';
-import { RecipeCreateComponent } from './features/recipes/recipe-create/recipe-create.component';
-import { RecipeDetailComponent } from './features/recipes/recipe-detail/recipe-detail.component';
-import { LoginComponent } from './features/auth/login/login.component';
-import { ConfirmEmailComponent } from './features/auth/confirm-email/confirm-email.component';
-import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
-import { UserProfileComponent } from './features/profile/user-profile.component';
-import { SavedRecipesComponent } from './features/saved/saved-recipes.component';
-import { SettingsComponent } from './features/settings/settings.component';
-import { ConfirmEmailChangeComponent } from './features/auth/confirm-email-change/confirm-email-change.component';
 
 export const routes: Routes = [
   {
@@ -22,68 +11,104 @@ export const routes: Routes = [
   },
   {
     path: 'recipes/new',
-    component: RecipeCreateComponent,
+    loadComponent: () =>
+      import(
+        './features/recipes/recipe-create/recipe-create.component'
+      ).then((m) => m.RecipeCreateComponent),
     title: 'New Recipe - Recipe Exchange',
     canActivate: [authGuard],
   },
   {
     path: 'recipes/:id/edit',
-    component: RecipeCreateComponent,
+    loadComponent: () =>
+      import(
+        './features/recipes/recipe-create/recipe-create.component'
+      ).then((m) => m.RecipeCreateComponent),
     title: 'Edit Recipe - Recipe Exchange',
     canActivate: [authGuard],
   },
   {
     path: 'recipes/:id/:slug',
-    component: RecipeDetailComponent,
+    loadComponent: () =>
+      import(
+        './features/recipes/recipe-detail/recipe-detail.component'
+      ).then((m) => m.RecipeDetailComponent),
   },
   {
     path: 'saved',
-    component: SavedRecipesComponent,
+    loadComponent: () =>
+      import('./features/saved/saved-recipes.component').then(
+        (m) => m.SavedRecipesComponent
+      ),
     title: 'Saved Recipes - Recipe Exchange',
     canActivate: [authGuard],
   },
   {
     path: 'settings',
-    component: SettingsComponent,
+    loadComponent: () =>
+      import('./features/settings/settings.component').then(
+        (m) => m.SettingsComponent
+      ),
     title: 'Settings - Recipe Exchange',
     canActivate: [authGuard],
   },
   {
     path: 'confirm-email-change',
-    component: ConfirmEmailChangeComponent,
+    loadComponent: () =>
+      import(
+        './features/auth/confirm-email-change/confirm-email-change.component'
+      ).then((m) => m.ConfirmEmailChangeComponent),
     title: 'Confirm Email Change - Recipe Exchange',
     canActivate: [authGuard],
   },
   {
     path: 'profile/:username',
-    component: UserProfileComponent,
+    loadComponent: () =>
+      import('./features/profile/user-profile.component').then(
+        (m) => m.UserProfileComponent
+      ),
   },
   {
     path: 'register',
-    component: RegisterComponent,
+    loadComponent: () =>
+      import('./features/auth/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
     title: 'Register - Recipe Exchange',
     canActivate: [guestGuard],
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./features/auth/login/login.component').then(
+        (m) => m.LoginComponent
+      ),
     title: 'Login - Recipe Exchange',
     canActivate: [guestGuard],
   },
   {
     path: 'confirm-email',
-    component: ConfirmEmailComponent,
+    loadComponent: () =>
+      import(
+        './features/auth/confirm-email/confirm-email.component'
+      ).then((m) => m.ConfirmEmailComponent),
     title: 'Confirm Email - Recipe Exchange',
   },
   {
     path: 'forgot-password',
-    component: ForgotPasswordComponent,
+    loadComponent: () =>
+      import(
+        './features/auth/forgot-password/forgot-password.component'
+      ).then((m) => m.ForgotPasswordComponent),
     title: 'Forgot Password - Recipe Exchange',
     canActivate: [guestGuard],
   },
   {
     path: 'reset-password',
-    component: ResetPasswordComponent,
+    loadComponent: () =>
+      import(
+        './features/auth/reset-password/reset-password.component'
+      ).then((m) => m.ResetPasswordComponent),
     title: 'Reset Password - Recipe Exchange',
     canActivate: [guestGuard],
   },
