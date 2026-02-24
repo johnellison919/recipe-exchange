@@ -1,5 +1,6 @@
 import { Component, inject, input, output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
 import { CommonModule } from '@angular/common';
 import { VoteType } from '../../../models/vote.model';
@@ -23,6 +24,7 @@ interface VoteResponse {
 export class VoteButtonsComponent {
   private readonly authService = inject(AuthService);
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
   // Inputs
   recipeId = input.required<string>();
@@ -46,7 +48,10 @@ export class VoteButtonsComponent {
   }
 
   onUpvote(): void {
-    if (!this.isAuthenticated) return;
+    if (!this.isAuthenticated) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
     const oldVote = this.userVote();
     const newVoteType: VoteType = this.isUpvoted ? null : 'upvote';
@@ -75,7 +80,10 @@ export class VoteButtonsComponent {
   }
 
   onDownvote(): void {
-    if (!this.isAuthenticated) return;
+    if (!this.isAuthenticated) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
     const oldVote = this.userVote();
     const newVoteType: VoteType = this.isDownvoted ? null : 'downvote';

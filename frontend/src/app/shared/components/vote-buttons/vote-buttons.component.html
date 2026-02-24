@@ -3,7 +3,6 @@
     type="button"
     class="vote-button upvote"
     [class.active]="isUpvoted"
-    [disabled]="!isAuthenticated"
     (click)="onUpvote()"
     [attr.aria-label]="isAuthenticated ? 'Upvote' : 'Login to vote'"
   >
@@ -15,7 +14,6 @@
   <button
     class="vote-button downvote"
     [class.active]="isDownvoted"
-    [disabled]="!isAuthenticated"
     (click)="onDownvote()"
     [title]="isAuthenticated ? 'Downvote' : 'Login to vote'"
     [attr.aria-label]="isAuthenticated ? 'Downvote' : 'Login to vote'"
