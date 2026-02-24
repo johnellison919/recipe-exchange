@@ -8,7 +8,7 @@
   <article class="recipe-detail">
     <div class="recipe-image-container">
       @if (recipe()!.imageUrl) {
-        <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" />
+        <img [src]="recipe()!.imageUrl" [alt]="recipe()!.title" class="recipe-image" fetchpriority="high" />
       }
       @if (isAuthenticated()) {
         <button

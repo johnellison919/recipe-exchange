@@ -32,7 +32,7 @@
     }
     @if (recipe().imageUrl) {
       <a [routerLink]="['/recipes', recipe().id, slugify(recipe().title)]" class="image-link">
-        <img [src]="recipe().imageUrl" [alt]="recipe().title" class="recipe-image" />
+        <img [src]="recipe().imageUrl" [alt]="recipe().title" class="recipe-image" loading="lazy" decoding="async" />
       </a>
     }
 

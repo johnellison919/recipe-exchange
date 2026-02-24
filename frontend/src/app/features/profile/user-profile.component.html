@@ -9,6 +9,8 @@
         [src]="getAvatarUrl(profile()!.avatarUrl, profile()!.username)"
         [alt]="profile()!.username"
         class="profile-avatar"
+        loading="lazy"
+        decoding="async"
       />
       <div class="profile-info">
         <h1>{{ profile()!.username }}</h1>
