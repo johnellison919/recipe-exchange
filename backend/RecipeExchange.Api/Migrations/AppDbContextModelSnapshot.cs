@@ -173,13 +173,6 @@ namespace RecipeExchange.Api.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasDefaultValue("user");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
