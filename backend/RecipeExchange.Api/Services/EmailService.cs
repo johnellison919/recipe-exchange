@@ -8,9 +8,14 @@ public class EmailService
     private readonly string _fromEmail;
     private readonly string _fromName;
     private readonly string _frontendBaseUrl;
+    private readonly bool _isDevelopment;
+    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IConfiguration configuration)
+    public EmailService(IConfiguration configuration, IHostEnvironment environment, ILogger<EmailService> logger)
     {
+        _isDevelopment = environment.IsDevelopment();
+        _logger = logger;
+
         var apiKey = configuration["Resend:ApiKey"]
             ?? throw new InvalidOperationException("Resend:ApiKey is not configured.");
         _fromEmail = configuration["Resend:FromEmail"] ?? "noreply@example.com";
@@ -23,6 +28,12 @@ public class EmailService
     public async Task SendConfirmationEmail(string toEmail, string username, string token)
     {
         var confirmUrl = $"{_frontendBaseUrl}/confirm-email?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(toEmail)}";
+
+        if (_isDevelopment)
+        {
+            _logger.LogInformation("[DEV] Confirmation email for {Email}:\n  {Url}", toEmail, confirmUrl);
+            return;
+        }
 
         var message = new EmailMessage
         {
@@ -45,6 +56,12 @@ public class EmailService
     {
         var confirmUrl = $"{_frontendBaseUrl}/confirm-email-change?token={Uri.EscapeDataString(token)}";
 
+        if (_isDevelopment)
+        {
+            _logger.LogInformation("[DEV] Email change confirmation for {Email}:\n  {Url}", toEmail, confirmUrl);
+            return;
+        }
+
         var message = new EmailMessage
         {
             From = $"{_fromName} <{_fromEmail}>",
@@ -65,6 +82,12 @@ public class EmailService
     public async Task SendPasswordResetEmail(string toEmail, string username, string token)
     {
         var resetUrl = $"{_frontendBaseUrl}/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(toEmail)}";
+
+        if (_isDevelopment)
+        {
+            _logger.LogInformation("[DEV] Password reset email for {Email}:\n  {Url}", toEmail, resetUrl);
+            return;
+        }
 
         var message = new EmailMessage
         {
