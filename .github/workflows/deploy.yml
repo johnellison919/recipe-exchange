@@ -55,7 +55,7 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_KEY }}
           source: "backend/RecipeExchange.Api/publish/*"
           target: "/var/www/recipe-exchange/backend"
-          strip_components: 4
+          strip_components: 3
 
       - name: Restart services
         uses: appleboy/ssh-action@v1.0.3
