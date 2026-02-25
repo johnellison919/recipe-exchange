@@ -9,6 +9,7 @@ public class User
     public string Email { get; set; } = string.Empty;
     public string? AvatarUrl { get; set; }
     public string? Bio { get; set; }
+    public string Role { get; set; } = "user";
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [JsonIgnore]
