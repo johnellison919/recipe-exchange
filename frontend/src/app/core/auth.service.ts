@@ -22,6 +22,7 @@ export class AuthService {
   readonly authLoading = this.authLoadingSignal.asReadonly();
   readonly authError = this.authErrorSignal.asReadonly();
   readonly isAuthenticated = computed(() => this.currentUserSignal() !== null);
+  readonly isAdmin = computed(() => this.currentUserSignal()?.role === 'admin');
 
   constructor() {
     this.initialize();

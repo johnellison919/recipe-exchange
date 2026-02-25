@@ -43,6 +43,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   protected readonly isAuthor = computed(
     () => this.recipe()?.authorId === this.authService.currentUser()?.id,
   );
+  protected readonly canModify = computed(
+    () => this.isAuthor() || this.authService.isAdmin(),
+  );
   protected readonly isAuthenticated = this.authService.isAuthenticated;
   protected readonly getAvatarUrl = getAvatarUrl;
 
