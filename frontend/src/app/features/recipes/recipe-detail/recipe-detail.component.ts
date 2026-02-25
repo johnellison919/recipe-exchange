@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
@@ -35,6 +35,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly titleService = inject(Title);
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private readonly recentlyViewed = inject(RecentlyViewedService);
 
   protected readonly recipe = this.recipeService.selectedRecipe;
@@ -97,6 +98,17 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   onVoteChange(event: VoteChangeEvent): void {
     this.localVoteScore.set(event.voteScore);
     this.localUserVote.set(event.userVote);
+  }
+
+  onDelete(): void {
+    const r = this.recipe();
+    if (!r || !this.canModify()) return;
+
+    if (!confirm('Are you sure you want to delete this recipe? This cannot be undone.')) return;
+
+    this.recipeService.deleteRecipe(r.id).subscribe({
+      next: () => this.router.navigate(['/']),
+    });
   }
 
   onToggleSave(): void {

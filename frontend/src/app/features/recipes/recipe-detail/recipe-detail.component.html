@@ -66,6 +66,9 @@
             <a [routerLink]="['/recipes', recipe()!.id, 'edit']" class="button button-outline"
               >Edit Recipe</a
             >
+            <button type="button" class="button button-danger" (click)="onDelete()">
+              Delete
+            </button>
           }
         </div>
       </div>
