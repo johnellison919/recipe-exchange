@@ -1,0 +1,18 @@
+<div class="confirm-email">
+  <div class="confirm-email-container">
+    @if (loading()) {
+      <h1>Confirming your email...</h1>
+      <p class="subtitle">Please wait while we verify your email address.</p>
+    } @else if (success()) {
+      <h1>Email Confirmed!</h1>
+      <p class="subtitle">
+        Your email has been confirmed successfully. You can now log in to your account.
+      </p>
+      <a routerLink="/login" class="button button-primary submit-button">Go to Login</a>
+    } @else {
+      <h1>Confirmation Failed</h1>
+      <div class="error-message">{{ errorMessage() }}</div>
+      <a routerLink="/login" class="button button-primary submit-button">Go to Login</a>
+    }
+  </div>
+</div>
