@@ -17,7 +17,8 @@ public record UserResponse(
     string Email,
     string? AvatarUrl,
     string? Bio,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    string Role);
 
 public record UserProfileResponse(
     string Id,
@@ -26,6 +27,7 @@ public record UserProfileResponse(
     string? AvatarUrl,
     string? Bio,
     DateTime CreatedAt,
+    string Role,
     int RecipeCount,
     int TotalVoteScore);
 

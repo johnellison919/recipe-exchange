@@ -53,3 +53,13 @@
     background-color: var(--color-gray-100);
   }
 }
+
+.button-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+
+  &:hover {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+  }
+}

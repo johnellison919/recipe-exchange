@@ -4,6 +4,7 @@ export interface User {
   email: string;
   avatarUrl?: string;
   bio?: string;
+  role: string;
   createdAt: Date;
   recipeCount?: number;
   totalVoteScore?: number;

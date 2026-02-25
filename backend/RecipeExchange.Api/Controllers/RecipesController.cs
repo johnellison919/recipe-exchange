@@ -51,7 +51,8 @@ public class RecipesController(RecipeService recipeService, VoteService voteServ
     public async Task<IActionResult> Update(string id, [FromBody] UpdateRecipeRequest request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var (result, error) = await recipeService.Update(id, request, userId);
+        var isAdmin = User.IsInRole("admin");
+        var (result, error) = await recipeService.Update(id, request, userId, isAdmin);
         return error switch
         {
             "not_found" => NotFound(),
@@ -65,7 +66,8 @@ public class RecipesController(RecipeService recipeService, VoteService voteServ
     public async Task<IActionResult> Delete(string id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var error = await recipeService.Delete(id, userId);
+        var isAdmin = User.IsInRole("admin");
+        var error = await recipeService.Delete(id, userId, isAdmin);
         return error switch
         {
             "not_found" => NotFound(),
