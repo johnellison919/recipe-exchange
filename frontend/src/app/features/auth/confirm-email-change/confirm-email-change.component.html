@@ -1,0 +1,16 @@
+<div class="confirm-email-change">
+  <div class="confirm-email-change-container">
+    @if (loading()) {
+      <h1>Confirming your new email...</h1>
+      <p class="subtitle">Please wait while we update your email address.</p>
+    } @else if (success()) {
+      <h1>Email Updated!</h1>
+      <p class="subtitle">Your email address has been changed successfully.</p>
+      <a routerLink="/settings" class="button button-primary submit-button">Back to Settings</a>
+    } @else {
+      <h1>Update Failed</h1>
+      <div class="error-message">{{ errorMessage() }}</div>
+      <a routerLink="/settings" class="button button-primary submit-button">Back to Settings</a>
+    }
+  </div>
+</div>
