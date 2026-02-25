@@ -28,6 +28,12 @@ export class RecentlyViewedService {
     this.save(updated);
   }
 
+  remove(id: string): void {
+    const updated = this.entriesSignal().filter((e) => e.id !== id);
+    this.entriesSignal.set(updated);
+    this.save(updated);
+  }
+
   private load(): RecentlyViewedEntry[] {
     if (!this.isBrowser) return [];
     try {
