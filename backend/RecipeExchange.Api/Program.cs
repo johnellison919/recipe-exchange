@@ -97,10 +97,9 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
-// Run pending migrations on startup (development only)
-if (app.Environment.IsDevelopment())
+// Run pending migrations on startup
+using (var scope = app.Services.CreateScope())
 {
-    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
 }
