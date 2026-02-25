@@ -107,7 +107,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (!confirm('Are you sure you want to delete this recipe? This cannot be undone.')) return;
 
     this.recipeService.deleteRecipe(r.id).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: () => {
+        this.recentlyViewed.remove(r.id);
+        this.router.navigate(['/']);
+      },
     });
   }
 
