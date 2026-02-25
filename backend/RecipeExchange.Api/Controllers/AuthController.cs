@@ -151,6 +151,16 @@ public class AuthController(AuthService authService, EmailService emailService) 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var user = await authService.GetById(userId);
         if (user is null) return NotFound();
+
+        // Refresh cookie if the DB role has drifted from the cookie claims
+        var cookieRole = User.FindFirstValue(ClaimTypes.Role);
+        if (cookieRole != user.Role)
+        {
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                BuildPrincipal(user));
+        }
+
         return Ok(await authService.GetProfile(user));
     }
 
