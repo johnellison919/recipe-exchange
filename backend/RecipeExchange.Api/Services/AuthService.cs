@@ -186,11 +186,11 @@ public class AuthService(AppDbContext db, IPasswordHasher<User> hasher, ILogger<
 
         return new UserProfileResponse(
             user.Id, user.Username, user.Email, user.AvatarUrl, user.Bio,
-            user.CreatedAt, recipeCount, totalVoteScore);
+            user.CreatedAt, user.Role, recipeCount, totalVoteScore);
     }
 
     public static UserResponse MapUser(User user) =>
-        new(user.Id, user.Username, user.Email, user.AvatarUrl, user.Bio, user.CreatedAt);
+        new(user.Id, user.Username, user.Email, user.AvatarUrl, user.Bio, user.CreatedAt, user.Role);
 
     public async Task<(string? token, string? error)> RequestEmailChange(string userId, string newEmail)
     {
