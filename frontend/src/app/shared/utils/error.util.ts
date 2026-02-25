@@ -12,6 +12,8 @@ const KNOWN_ERROR_MESSAGES = new Set([
   'Email already in use.',
   'Username already taken',
   'Username already taken.',
+  'Password must be at least 8 characters.',
+  'Password must contain at least one uppercase letter and one digit.',
   'Account is locked. Try again later.',
   'Account is locked. Please try again later.',
   'Email not confirmed. Please check your inbox.',
