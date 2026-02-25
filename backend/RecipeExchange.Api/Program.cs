@@ -102,6 +102,18 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
+
+    // Seed admin user from configuration
+    var adminEmail = app.Configuration["AdminEmail"];
+    if (!string.IsNullOrEmpty(adminEmail))
+    {
+        var adminUser = await db.Users.FirstOrDefaultAsync(u => u.Email == adminEmail);
+        if (adminUser != null && adminUser.Role != "admin")
+        {
+            adminUser.Role = "admin";
+            await db.SaveChangesAsync();
+        }
+    }
 }
 
 if (app.Environment.IsDevelopment())
