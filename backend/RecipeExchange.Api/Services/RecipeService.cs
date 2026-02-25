@@ -93,11 +93,11 @@ public class RecipeService(AppDbContext db)
     }
 
     public async Task<(RecipeResponse? result, string? error)> Update(
-        string id, UpdateRecipeRequest request, string userId)
+        string id, UpdateRecipeRequest request, string userId, bool isAdmin = false)
     {
         var recipe = await db.Recipes.FindAsync(id);
         if (recipe is null) return (null, "not_found");
-        if (recipe.AuthorId != userId) return (null, "forbidden");
+        if (recipe.AuthorId != userId && !isAdmin) return (null, "forbidden");
 
         if (request.Title is not null) recipe.Title = request.Title;
         if (request.Description is not null) recipe.Description = request.Description;
@@ -161,11 +161,11 @@ public class RecipeService(AppDbContext db)
             .ToList();
     }
 
-    public async Task<string?> Delete(string id, string userId)
+    public async Task<string?> Delete(string id, string userId, bool isAdmin = false)
     {
         var recipe = await db.Recipes.FindAsync(id);
         if (recipe is null) return "not_found";
-        if (recipe.AuthorId != userId) return "forbidden";
+        if (recipe.AuthorId != userId && !isAdmin) return "forbidden";
 
         db.Recipes.Remove(recipe);
         await db.SaveChangesAsync();
