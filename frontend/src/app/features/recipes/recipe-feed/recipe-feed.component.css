@@ -56,11 +56,11 @@
   padding: 10rem 0;
 }
 
-.recipe-grid {
+.recipe-container {
   padding-top: 3rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
 }
 
 /* Mobile filter button — hidden on desktop */
