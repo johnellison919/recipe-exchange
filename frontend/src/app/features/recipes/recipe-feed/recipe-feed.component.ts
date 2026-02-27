@@ -23,6 +23,7 @@ export class RecipeFeedComponent implements OnDestroy {
   protected readonly categories = signal<string[]>([]);
   protected readonly currentPage = signal(1);
   protected readonly pageSize = 12;
+  protected readonly mobileMenuOpen = signal(false);
 
   protected readonly totalRecipes = computed(() =>
     this.recipeService.filteredAndSortedRecipes().length,
@@ -87,6 +88,35 @@ export class RecipeFeedComponent implements OnDestroy {
     this.currentPage.set(1);
     this.recipeService.setDateRange(dateRange);
     this.scheduleSnapshot();
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update(v => !v);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
+
+  setSortNewest(): void {
+    this.currentPage.set(1);
+    this.recipeService.setSortBy('newest');
+    this.recipeService.setDateRange('all-time');
+    this.scheduleSnapshot();
+    this.closeMobileMenu();
+  }
+
+  setSortTopRated(dateRange: DateRange): void {
+    this.currentPage.set(1);
+    this.recipeService.setSortBy('top-rated');
+    this.recipeService.setDateRange(dateRange);
+    this.scheduleSnapshot();
+    this.closeMobileMenu();
+  }
+
+  setCategoryMobile(category: RecipeCategory | null): void {
+    this.setCategory(category);
+    this.closeMobileMenu();
   }
 
   onPageChange(page: number): void {
