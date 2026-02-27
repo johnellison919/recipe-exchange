@@ -183,3 +183,9 @@
     }
   }
 }
+
+@media (max-width: 992px) {
+  .recipe-detail .recipe-body {
+    grid-template-columns: 1fr;
+  }
+}
