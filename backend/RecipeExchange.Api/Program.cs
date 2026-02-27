@@ -114,6 +114,15 @@ using (var scope = app.Services.CreateScope())
             await db.SaveChangesAsync();
         }
     }
+
+    // Seed sample data when --seed flag is passed (Development only)
+    if (app.Environment.IsDevelopment() && args.Contains("--seed"))
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("SeedData");
+        await SeedData.SeedAsync(db, logger);
+        logger.LogInformation("Seeding complete. Exiting.");
+        return;
+    }
 }
 
 if (app.Environment.IsDevelopment())
