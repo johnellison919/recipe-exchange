@@ -5,6 +5,18 @@
     </a>
     <div class="auth-section">
       @if (authService.isAuthenticated()) {
+        <a routerLink="/recipes/new" class="new-recipe-link" aria-label="New recipe">
+          <i class="ci ci-Add_Plus_Circle"></i>
+        </a>
+      }
+      <button
+        class="search-icon-link"
+        aria-label="Search recipes"
+        (click)="searchModalOpen.set(true)"
+      >
+        <i class="ci ci-Search_Magnifying_Glass"></i>
+      </button>
+      @if (authService.isAuthenticated()) {
         <div class="user-menu">
           <button class="user-button" (click)="toggleDropdown()">
             <img
@@ -42,3 +54,5 @@
     </div>
   </div>
 </header>
+
+<app-search-modal [isOpen]="searchModalOpen()" (closed)="searchModalOpen.set(false)" />

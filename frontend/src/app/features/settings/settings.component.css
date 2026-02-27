@@ -1,3 +1,8 @@
+:host {
+  width: 100%;
+  margin-right: 1rem;
+}
+
 .settings-container {
   width: 100%;
 

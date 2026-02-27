@@ -1,13 +1,18 @@
+:host {
+  width: 100%;
+  margin-right: 1rem;
+}
+
 .saved-container {
   .saved-header {
     margin-bottom: 1rem;
   }
 }
 
-.recipe-grid {
-  display: grid;
+.recipe-container {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
 }
 
 .empty-state {
