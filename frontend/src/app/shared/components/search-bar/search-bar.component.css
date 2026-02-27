@@ -1,0 +1,23 @@
+.search-wrapper {
+  display: flex;
+  position: relative;
+
+  .search-input {
+    width: 100%;
+  }
+
+  .search-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background: unset;
+    border: unset;
+    padding-right: 0.75rem;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+}

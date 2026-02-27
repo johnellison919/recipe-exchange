@@ -1,0 +1,10 @@
+@if (isOpen()) {
+  <div class="search-modal-overlay" (click)="onBackdropClick($event)">
+    <div class="search-modal-content">
+      <button class="search-modal-close" aria-label="Close search" (click)="close()">
+        <i class="ci ci-Close_MD"></i>
+      </button>
+      <app-search-bar (searched)="onSearched()" />
+    </div>
+  </div>
+}

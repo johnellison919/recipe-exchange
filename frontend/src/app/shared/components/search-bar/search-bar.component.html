@@ -1,0 +1,14 @@
+<div class="search-wrapper">
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Search"
+    maxlength="200"
+    [ngModel]="searchQuery()"
+    (ngModelChange)="onSearchInput($event)"
+    (keydown.enter)="search()"
+  />
+  <button type="button" class="search-button" aria-label="Search recipes" (click)="search()">
+    <i class="ci ci-Search_Magnifying_Glass"></i>
+  </button>
+</div>

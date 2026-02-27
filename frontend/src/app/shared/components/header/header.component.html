@@ -4,6 +4,9 @@
       <img src="/logo.png" alt="Recipe Exchange" />
     </a>
     <div class="auth-section">
+      <button class="search-icon-link" aria-label="Search recipes" (click)="searchModalOpen.set(true)">
+        <i class="ci ci-Search_Magnifying_Glass"></i>
+      </button>
       @if (authService.isAuthenticated()) {
         <div class="user-menu">
           <button class="user-button" (click)="toggleDropdown()">
@@ -42,3 +45,5 @@
     </div>
   </div>
 </header>
+
+<app-search-modal [isOpen]="searchModalOpen()" (closed)="searchModalOpen.set(false)" />

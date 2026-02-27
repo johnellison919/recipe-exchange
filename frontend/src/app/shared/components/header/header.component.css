@@ -1,6 +1,7 @@
 .header {
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-gray-200);
+  padding: 0.25rem 2rem;
 
   & .header-container {
     margin: auto;
@@ -12,7 +13,6 @@
     & .logo {
       display: flex;
       max-width: 8rem;
-      padding: 0.25rem 0;
 
       & img {
         width: 100%;
@@ -20,6 +20,26 @@
     }
 
     & .auth-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      & .search-icon-link {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-secondary);
+        font-size: 1.25rem;
+        text-decoration: none;
+        background: unset;
+        border: unset;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: var(--color-text-primary);
+        }
+      }
+
       & .auth-buttons {
         display: flex;
         gap: 1rem;
@@ -87,5 +107,11 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: 992px) {
+  .header .header-container .auth-section .search-icon-link {
+    display: flex;
   }
 }

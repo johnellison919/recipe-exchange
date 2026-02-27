@@ -1,11 +1,9 @@
 .app-layout {
-  display: flex;
-  gap: 1rem;
-  max-width: var(--container-width);
-  margin: auto;
-  padding: 3rem 0;
+  padding: 3rem 2rem;
 
   & .main-content {
-    width: 100%;
+    max-width: var(--container-width);
+    margin: auto;
+    display: flex;
   }
 }

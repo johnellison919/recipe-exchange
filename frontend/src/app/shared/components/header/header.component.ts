@@ -2,10 +2,11 @@ import { Component, inject, signal, computed, HostListener, ElementRef } from '@
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
 import { getAvatarUrl } from '../../utils/avatar.util';
+import { SearchModalComponent } from '../search-modal/search-modal.component';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, SearchModalComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -15,6 +16,7 @@ export class HeaderComponent {
   private readonly elementRef = inject(ElementRef);
 
   protected readonly dropdownOpen = signal(false);
+  protected readonly searchModalOpen = signal(false);
   protected readonly avatarSrc = computed(() => {
     const user = this.authService.currentUser();
     return user ? getAvatarUrl(user.avatarUrl, user.username) : '';
