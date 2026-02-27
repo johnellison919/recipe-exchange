@@ -24,6 +24,20 @@
       align-items: center;
       gap: 1rem;
 
+      & .new-recipe-link {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-secondary);
+        font-size: 1.25rem;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: var(--color-text-primary);
+        }
+      }
+
       & .search-icon-link {
         display: none;
         align-items: center;
@@ -111,6 +125,10 @@
 }
 
 @media (max-width: 992px) {
+  .header .header-container .auth-section .new-recipe-link {
+    display: flex;
+  }
+
   .header .header-container .auth-section .search-icon-link {
     display: flex;
   }

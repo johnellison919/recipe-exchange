@@ -4,7 +4,16 @@
       <img src="/logo.png" alt="Recipe Exchange" />
     </a>
     <div class="auth-section">
-      <button class="search-icon-link" aria-label="Search recipes" (click)="searchModalOpen.set(true)">
+      @if (authService.isAuthenticated()) {
+        <a routerLink="/recipes/new" class="new-recipe-link" aria-label="New recipe">
+          <i class="ci ci-Add_Plus_Circle"></i>
+        </a>
+      }
+      <button
+        class="search-icon-link"
+        aria-label="Search recipes"
+        (click)="searchModalOpen.set(true)"
+      >
         <i class="ci ci-Search_Magnifying_Glass"></i>
       </button>
       @if (authService.isAuthenticated()) {
