@@ -26,7 +26,7 @@
       @if (recipes().length === 0) {
         <p class="empty-state">No recipes yet.</p>
       } @else {
-        <div class="recipe-grid">
+        <div class="recipe-container">
           @for (recipe of paginatedRecipes(); track recipe.id) {
             <app-recipe-card [recipe]="recipe" />
           }
