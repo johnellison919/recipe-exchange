@@ -1,21 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentRef } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
-import { RecipeCreateComponent } from './recipe-create.component';
+import { SearchModalComponent } from './search-modal.component';
 
-describe('RecipeCreate', () => {
-  let component: RecipeCreateComponent;
-  let fixture: ComponentFixture<RecipeCreateComponent>;
+describe('SearchModal', () => {
+  let component: SearchModalComponent;
+  let componentRef: ComponentRef<SearchModalComponent>;
+  let fixture: ComponentFixture<SearchModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RecipeCreateComponent],
+      imports: [SearchModalComponent],
       providers: [provideRouter([]), provideHttpClient()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RecipeCreateComponent);
+    fixture = TestBed.createComponent(SearchModalComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
+    componentRef.setInput('isOpen', false);
     await fixture.whenStable();
   });
 
