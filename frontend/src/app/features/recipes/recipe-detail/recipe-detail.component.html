@@ -39,7 +39,12 @@
         <span class="meta-tag difficulty" [class]="'difficulty-' + recipe()!.difficulty">
           {{ recipe()!.difficulty }}
         </span>
-        <span class="meta-tag">{{ recipe()!.prepTime + recipe()!.cookTime }} min total</span>
+        @if (recipe()!.prepTime) {
+          <span class="meta-tag">{{ recipe()!.prepTime }} min prep</span>
+        }
+        @if (recipe()!.cookTime) {
+          <span class="meta-tag">{{ recipe()!.cookTime }} min cook</span>
+        }
         <span class="meta-tag">{{ recipe()!.servings }} servings</span>
       </div>
 
