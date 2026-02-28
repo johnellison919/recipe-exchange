@@ -2,19 +2,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
-import { RecipeCreateComponent } from './recipe-create.component';
+import { SavedRecipesComponent } from './saved-recipes.component';
 
-describe('RecipeCreate', () => {
-  let component: RecipeCreateComponent;
-  let fixture: ComponentFixture<RecipeCreateComponent>;
+describe('SavedRecipes', () => {
+  let component: SavedRecipesComponent;
+  let fixture: ComponentFixture<SavedRecipesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RecipeCreateComponent],
+      imports: [SavedRecipesComponent],
       providers: [provideRouter([]), provideHttpClient()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RecipeCreateComponent);
+    fixture = TestBed.createComponent(SavedRecipesComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
