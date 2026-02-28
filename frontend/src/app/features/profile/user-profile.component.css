@@ -49,10 +49,10 @@
       text-align: center;
     }
 
-    .recipe-grid {
-      display: grid;
+    .recipe-container {
+      display: flex;
+      flex-direction: column;
       gap: 1rem;
-      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
